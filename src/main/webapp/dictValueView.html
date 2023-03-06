@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- 响应式支持:兼容多终端 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Hello</title>
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"/>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css"/>
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/adminlte.min.css"/>
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css"/>
+
+    <!-- DataTables -->
+    <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" href="plugins/datatables-select/css/select.bootstrap4.min.css">
+
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <!-- Left navbar links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="#" role="button">
+                    <i class="fas fa-bars"></i>
+                </a>
+            </li>
+        </ul>
+
+        <!-- Right navbar links -->
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" data-widget="" href="#" role="button">
+                    退出
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#"
+                   role="button">
+                    <i class="fas fa-th-large"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <!-- /.navbar -->
+
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <!-- Brand Logo -->
+        <a href="index.html" class="brand-link">
+            <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+                 style="opacity: 0.8"/>
+            <span class="brand-text font-weight-light">客户关系管理系统</span>
+        </a>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Sidebar user panel (optional) -->
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div class="image">
+                    <img src="dist/img/avatar5.png" class="dist/img-circle elevation-2" alt="User Image"/>
+                </div>
+                <div class="info">
+                    <a href="#" class="d-block">Usr</a>
+                </div>
+            </div>
+
+            <!-- Sidebar Menu -->
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                    data-accordion="false">
+                    <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+                    <li class="nav-item menu-open">
+                        <a href="#" class="nav-link active">
+                            <i class="nav-icon fas fa-th"></i>
+                            <p>
+                                字典管理
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="dictTypeView.html" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>字典类型管理</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link active">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>字典数值管理</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-user-circle"></i>
+                            <p>
+                                用户中心
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>用户信息</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>修改密码</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <!-- /.sidebar-menu -->
+        </div>
+        <!-- /.sidebar -->
+    </aside>
+    <!-- /.sidebar -->
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <!-- 12栅栏 -->
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <!-- .col-xs-:手机 .col-sm-:平板 .col-md-:桌面显示器(≥992px) .col-lg-:大桌面显示器(≥1200px) -->
+                    <!-- 可以简单地按最小尺寸设备划分栅格 -->
+                    <div class="col-sm-6">
+                        <h1 class="m-0">字典数值信息</h1>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="index.html">返回</a></li>
+                            <li class="breadcrumb-item active">字典数值信息</li>
+                        </ol>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+        </section>
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <!-- rows-->
+                <div class="row" style="margin-bottom: 1%">
+                    <div class="col-2">
+                        <button type="button" class="btn btn-block btn-success" id="addBtn">添加
+                        </button>
+                    </div>
+                    <div class="col-2">
+                        <button type="button" class="btn btn-block btn-danger" id="delBtn">删除</button>
+                    </div>
+                    <!--                    <div class="col-2">-->
+                    <!--                        <button type="button" class="btn btn-block btn-primary" id="testBtn">测试</button>-->
+                    <!--                    </div>-->
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <input type="hidden" id="ids">
+                        <table id="dictValues" class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th><input type="checkbox"></th>
+                                <th>编号</th>
+                                <th>数值</th>
+                                <th>描述</th>
+                                <th>序号</th>
+                                <th>类型编号</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.rows -->
+            </div>
+            <!-- /.container-fluid -->
+            <!-- modal:模态框 -->
+            <!-- 字典数值编辑模态框 -->
+            <div class="modal fade" id="dictValueModal" data-type="add" style="display: none;" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">添加字典数值</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <input type="hidden" class="form-control" id="id">
+                                </div>
+                                <div class="form-group">
+                                    <label for="value">数值</label>
+                                    <input type="text" class="form-control" id="value" placeholder="请输入字典数值">
+                                </div>
+                                <div class="form-group">
+                                    <label for="text">描述</label>
+                                    <input type="text" class="form-control" id="text" placeholder="请输入数值描述">
+                                </div>
+                                <div class="form-group">
+                                    <label for="orderNo">序号</label>
+                                    <input type="text" class="form-control" id="orderNo" placeholder="请输入数值序号">
+                                </div>
+                                <div class="form-group">
+                                    <label for="types">所属类型</label>
+                                    <select class="custom-select" id="types">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="button" class="btn btn-success" id="saveBtn">确认</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <strong>Copyright &copy; 2023-2024
+            <a href="#">.io</a>.</strong>
+        All rights reserved.
+        <div class="float-right d-none d-sm-inline-block">
+            <b>Version</b> Beta:0.0.1
+        </div>
+    </footer>
+    <!-- /.footer -->
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+
+</div>
+</body>
+
+</html>
+<!--  注意<scirpt>不可自闭合 -->
+<!-- jQuery -->
+<script src="plugins/jquery/jquery.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+    $.widget.bridge("uibutton", $.ui.button);
+</script>
+<!-- Bootstrap 4 -->
+<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Sparkline -->
+<script src="plugins/sparklines/sparkline.js"></script>
+<!-- overlayScrollbars -->
+<script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/adminlte.js"></script>
+
+<!-- DataTables  & Plugins -->
+<script src="plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script src="plugins/datatables-select/js/dataTables.select.min.js"></script>
+<script src="plugins/datatables-select/js/select.bootstrap4.min.js"></script>
+<script src="plugins/jszip/jszip.min.js"></script>
+<script src="plugins/pdfmake/pdfmake.min.js"></script>
+<script src="plugins/pdfmake/vfs_fonts.js"></script>
+<!-- SweetAlert2 -->
+<script src="plugins/sweetalert2/sweetalert2.min.js"></script>
+
+<script>
+
+    $(function () {
+
+        //todo 初始化表格
+        var table = $("#dictValues").DataTable({
+            "paging": true,
+            // 分页由后台处理
+            // "serverSide": true,
+            // 换页后更新全选复选框状态
+            // This function is called on every 'draw' event.
+            // "fnDrawCallback": function () {
+            //     $("thead :checkbox").prop("checked", false);
+            //     $("tbody :checkbox").prop("checked", false);
+            // },
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": true,
+            "responsive": true,
+            "ajax": {
+                url: "dictionaryValue/getAll.action",
+                type: "get",
+                dataType: "json",
+                async: false
+            },
+            "columns": [
+                {"data": null},
+                {"data": "id"},
+                {"data": "value"},
+                {"data": "text"},
+                {"data": "orderNo"},
+                {"data": "typeId"},
+                {"data": null}
+            ],
+            "columnDefs": [
+                {
+                    "targets": 0,
+                    /**
+                     * Datatables 从 cell获取数据时，调用该方法
+                     *
+                     * @param data: 当前 cell的值，基于 columns.data
+                     * @param type: 数据类型: filter、display、type、sort
+                     * @param row: 整个row的数据，不基于 columns.data
+                     * @param meta
+                     * @returns {string}
+                     */
+                    "render": function (data, type, row, meta) {
+                        return '<input type="checkbox" class="select-checkbox" value=' + row.id + '></input>';
+                    },
+                    "orderable": false
+                },
+                {
+                    "targets": -1,
+                    "render": function (data, type, row, meta) {
+                        return '<button class="btn btn-primary waves-effect" value=' + row.id + '>编辑</button>';
+                    },
+                    "orderable": false
+                }
+            ],
+            // 默认按照索引为0的列的值进行排序，故关闭(…)排序时，须指定排序列；
+            "order": [[5, 'asc'], [4, 'asc']]
+        });
+
+        // 初始化 dictValueModal
+        //todo 初始化模态框(由添加按钮触发，存在问题:关闭弹窗前为旧数据)
+        function initModal(callback) {
+            $.ajax({
+                url: "dictionaryType/getIds.action",
+                type: "get",
+                dataType: "json",
+                success: function (data, textStatus, jqXHR) {
+                    if (data.result === true) {
+                        $("#types").empty();
+                        $(data.data).each(function (i, e) {
+                            var option = $("<option value=" + e + ">" + e + "</option>");
+                            $("#types").append(option);
+                        })
+                        callback();
+                    } else {
+                        alert(data.msg);
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(textStatus);
+                }
+            });
+        }
+
+        $("#dictValueModal").on("show.bs.modal", function () {
+            if ($(this).data("type") === "add") {
+                $("#id").val("");
+                $("#value").val("");
+                $("#text").val("");
+                $("#orderNo").val("");
+                $("#types option:first").prop("selected", true);
+            }
+        });
+
+        //todo 删除按钮
+        $("#delBtn").click(function () {
+            var ids = getIds();
+            if (confirm("是否删除这" + ids.length + "项?")) {
+                $.ajax({
+                    url: "dictionaryValue/del.action",
+                    type: "post",
+                    // data: {"ids": ids},
+                    // traditional: true,
+                    contentType: "application/json; charset=UTF-8",
+                    data: JSON.stringify(ids),
+                    dataType: "json",
+                    success: function (data, textStatus, jqXHR) {
+                        if (data.result === true) {
+                            table.ajax.reload();
+                            $("#dictValues thead :checkbox").prop("checked", false);
+                        } else {
+                            alert(data.msg);
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(textStatus);
+                    }
+                })
+            }
+        });
+
+        //todo 添加按钮
+        $("#addBtn").click(function () {
+            $("#dictValueModal").data("type", "add");
+            $("#dictValueModal h4").text("添加字典数值");
+            initModal(function () {
+                $("#dictValueModal").modal('show');
+            })
+        });
+
+        //todo 保存按钮
+        $("#saveBtn").click(function () {
+            if ($("#dictValueModal").data("type") === "add") {
+                $.ajax({
+                        url: "dictionaryValue/add.action",
+                        type: "post",
+                        contentType: "application/json; charset=UTF-8",
+                        data: JSON.stringify({
+                            "value": $("#value").val(),
+                            "text": $("#text").val(),
+                            "orderNo": $("#orderNo").val(),
+                            "typeId": $("#types").val()
+                        }),
+                        dataType: "json",
+                        success: function (data, textStatus, jqXHR) {
+                            if (data.result === true) {
+                                $("#dictValueModal").modal('hide');
+                                table.ajax.reload();
+                                $("#dictValues thead :checkbox").prop("checked", false);
+                            } else {
+                                // 可以设置吐司弹窗
+                                alert(data.msg);
+                            }
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            alert(textStatus);
+                        }
+                    }
+                )
+            } else if ($("#dictValueModal").data("type") === "edit") {
+                $.ajax({
+                    url: "dictionaryValue/edit.action",
+                    type: "post",
+                    contentType: "application/json; charset=UTF-8",
+                    data: JSON.stringify({
+                        "id": $("#id").val(),
+                        "value": $("#value").val(),
+                        "text": $("#text").val(),
+                        "orderNo": $("#orderNo").val(),
+                        "typeId": $("#types").val()
+                    }),
+                    dataType: "json",
+                    success: function (data, textStatus, jqXHR) {
+                        if (data.result === true) {
+                            $("#dictValueModal").modal('hide');
+                            table.ajax.reload();
+                            $("#dictValues thead :checkbox").prop("checked", false);
+                        } else {
+                            alert(data.msg);
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(textStatus);
+                    }
+                })
+            }
+        });
+
+        // 表格内的动态组件绑定的(click)事件在表格刷新后失效，故改为利用 on监听其父组件(表格)；
+        //todo 编辑按钮
+        $("#dictValues tbody").on("click", ":button", function () {
+            $.ajax({
+                url: "dictionaryValue/get.action",
+                type: "get",
+                data: {"id": $(this).val()},
+                dataType: "json",
+                success: function (data, textStatus, jqXHR) {
+                    if (data.result === true) {
+                        $("#dictValueModal").data("type", "edit");
+                        $("#dictValueModal h4").text("修改字典数值");
+                        initModal(function () {
+                            $("#dictValueModal").modal('show');
+                        })
+
+                        $("#id").val(data.data.id);
+                        $("#value").val(data.data.value);
+                        $("#text").val(data.data.text);
+                        $("#orderNo").val(data.data.orderNo);
+                        $("#types option").each(function (i, e) {
+                            if ($(this).val() === data.data.typeId) {
+                                $(this).prop("selected", true);
+                            }
+                        });
+                    } else {
+                        alert(data.msg);
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(textStatus);
+                }
+            });
+        });
+
+        //todo 表项多选框
+        $("#dictValues tbody").on("change", ":checkbox", function () {
+            var el = $("#dictValues thead :checkbox").get(0);
+            if (this.checked) {
+                var rows = table.rows().nodes();
+                if ($(":checkbox:checked", rows).length === $(":checkbox", rows).length) {
+                    if (el && el.checked && ("indeterminate") in el) {
+                        el.indeterminate = false;
+                    }
+                    $("#dictValues thead :checkbox").prop("checked", true);
+                }
+            } else {
+                // 全选框变成不确定样式
+                if (el && el.checked && ("indeterminate") in el) {
+                    el.indeterminate = true;
+                }
+            }
+        });
+
+        //todo 表头多选框
+        $("#dictValues thead").on("click", ":checkbox", function () {
+            var rows = table.rows({'search': 'applied'}).nodes();
+            $(":checkbox", rows).prop("checked", this.checked);
+        });
+
+    });
+
+    function getIds() {
+        var ids = [];
+        var rows = $("#dictValues").DataTable().rows().nodes();
+        $(":checkbox:checked", rows).each(function (i, e) {
+            ids.push(e.value);
+        });
+        // 数组转字符串
+        // var s = ids.join(',');
+        // console.log(s);
+        return ids;
+    }
+</script>

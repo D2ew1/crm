@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjpowernode.mapper.DictionaryTypeMapper">
+    <resultMap id="dictTypeResultMap" type="com.bjpowernode.beans.DictionaryType">
+        <id column="type_id" property="id"/>
+        <result column="type_name" property="name"/>
+        <result column="description" property="description"/>
+    </resultMap>
+
+    <select id="getIds" resultType="String">
+        select type_id
+        from tbl_dictionary_type
+    </select>
+
+    <sql id="dictTypeInfo">
+        select type_id, type_name, description
+        from tbl_dictionary_type
+    </sql>
+
+    <select id="getAll" resultMap="dictTypeResultMap">
+        <include refid="dictTypeInfo"/>
+        order by type_id
+    </select>
+
+    <select id="get" resultMap="dictTypeResultMap">
+        <include refid="dictTypeInfo"/>
+        where type_id = #{id}
+    </select>
+
+    <insert id="add">
+        insert into tbl_dictionary_type (type_id, type_name, description)
+        values (#{id}, #{name}, #{description})
+    </insert>
+
+    <update id="edit">
+        update tbl_dictionary_type
+        set
+        type_name = #{name},
+        description = #{description}
+        where type_id = #{id}
+    </update>
+
+    <delete id="del">
+        delete from tbl_dictionary_type
+        where type_id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

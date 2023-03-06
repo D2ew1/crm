@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjpowernode.mapper.DictionaryValueMapper">
+    <resultMap id="dictValueResultMap" type="com.bjpowernode.beans.DictionaryValue">
+        <id column="value_id" property="id"/>
+        <result column="value" property="value"/>
+        <result column="text" property="text"/>
+        <result column="orderNo" property="orderNo"/>
+        <result column="type_id" property="typeId"/>
+        <association property="dictType" javaType="com.bjpowernode.beans.DictionaryType">
+            <result column="type_id" property="id"/>
+            <result column="type_name" property="name"/>
+            <result column="description" property="description"/>
+        </association>
+    </resultMap>
+
+    <sql id="dictValueInfo">
+        select value_id, value, text, orderNo, type_id, type_name, description
+        from tbl_dictionary_value inner join tbl_dictionary_type using(type_id)
+    </sql>
+
+    <select id="getAll" resultMap="dictValueResultMap">
+        <include refid="dictValueInfo"/>
+        order by type_id, orderNo
+    </select>
+
+    <select id="get" resultMap="dictValueResultMap">
+        <include refid="dictValueInfo"/>
+        where value_id = #{id}
+    </select>
+
+    <insert id="add">
+        insert into tbl_dictionary_value (value_id, value, text, orderNo, type_id)
+        values (#{id}, #{value}, #{text}, #{orderNo}, #{typeId})
+    </insert>
+
+    <update id="edit">
+        update tbl_dictionary_value
+        set
+        value = #{value},
+        text = #{text},
+        orderNo = #{orderNo},
+        type_id = #{typeId}
+        where value_id = #{id}
+    </update>
+
+    <!-- 批量删除 -->
+    <delete id="del">
+        delete from tbl_dictionary_value
+        where value_id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
