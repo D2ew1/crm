@@ -1,17 +1,20 @@
 package com.bjpowernode.services;
 
+import com.bjpowernode.exception.CustException;
+import com.bjpowernode.exception.DBException;
+
 import java.util.ArrayList;
 
 public interface BaseServices<T, I> {
 
-    ArrayList<T> getAll();
+    ArrayList<T> getAll() throws DBException;
 
-    T get(I id);
+    T get(I id) throws DBException;
 
-    boolean add(T t);
+    void add(T t) throws DBException;
 
-    boolean edit(T t);
+    void edit(T t) throws DBException;
 
-    boolean del(I[] ids);
+    void del(I[] ids) throws DBException;
 
 }

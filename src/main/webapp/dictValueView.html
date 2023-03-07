@@ -176,9 +176,6 @@
                     <div class="col-2">
                         <button type="button" class="btn btn-block btn-danger" id="delBtn">删除</button>
                     </div>
-                    <!--                    <div class="col-2">-->
-                    <!--                        <button type="button" class="btn btn-block btn-primary" id="testBtn">测试</button>-->
-                    <!--                    </div>-->
                 </div>
                 <div class="row">
                     <div class="col-12">
@@ -188,7 +185,7 @@
                             <tr>
                                 <th><input type="checkbox"></th>
                                 <th>编号</th>
-                                <th>数值</th>
+                                <th>名称</th>
                                 <th>描述</th>
                                 <th>序号</th>
                                 <th>类型编号</th>
@@ -220,8 +217,8 @@
                                     <input type="hidden" class="form-control" id="id">
                                 </div>
                                 <div class="form-group">
-                                    <label for="value">数值</label>
-                                    <input type="text" class="form-control" id="value" placeholder="请输入字典数值">
+                                    <label for="value">名称</label>
+                                    <input type="text" class="form-control" id="value" placeholder="请输入字典名称">
                                 </div>
                                 <div class="form-group">
                                     <label for="text">描述</label>
@@ -376,17 +373,19 @@
         });
 
         // 初始化 dictValueModal
-        //todo 初始化模态框(由添加按钮触发，存在问题:关闭弹窗前为旧数据)
+        //todo 初始化模态框(由添加/修改按钮触发)
         function initModal(callback) {
             $.ajax({
                 url: "dictionaryType/getIds.action",
                 type: "get",
                 dataType: "json",
+                async: false,
                 success: function (data, textStatus, jqXHR) {
                     if (data.result === true) {
                         $("#types").empty();
                         $(data.data).each(function (i, e) {
-                            var option = $("<option value=" + e + ">" + e + "</option>");
+                            // 需要把值用双引号包起来
+                            var option = $("<option value='" + e + "'>" + e + "</option>");
                             $("#types").append(option);
                         })
                         callback();
@@ -400,19 +399,13 @@
             });
         }
 
-        $("#dictValueModal").on("show.bs.modal", function () {
-            if ($(this).data("type") === "add") {
-                $("#id").val("");
-                $("#value").val("");
-                $("#text").val("");
-                $("#orderNo").val("");
-                $("#types option:first").prop("selected", true);
-            }
-        });
-
         //todo 删除按钮
         $("#delBtn").click(function () {
             var ids = getIds();
+            if (ids.length <= 0) {
+                alert("未选中任意行");
+                return;
+            }
             if (confirm("是否删除这" + ids.length + "项?")) {
                 $.ajax({
                     url: "dictionaryValue/del.action",
@@ -433,7 +426,7 @@
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                         alert(textStatus);
                     }
-                })
+                });
             }
         });
 
@@ -443,6 +436,11 @@
             $("#dictValueModal h4").text("添加字典数值");
             initModal(function () {
                 $("#dictValueModal").modal('show');
+                $("#id").val("");
+                $("#value").val("");
+                $("#text").val("");
+                $("#orderNo").val("");
+                $("#types option:first").prop("selected", true);
             })
         });
 
@@ -516,6 +514,7 @@
                     if (data.result === true) {
                         $("#dictValueModal").data("type", "edit");
                         $("#dictValueModal h4").text("修改字典数值");
+                        // 注意：若initModal是异步的，则下面的赋值可能会在模态框初始化(下拉框渲染)完之前执行；所以要把initModal设置为同步执行；
                         initModal(function () {
                             $("#dictValueModal").modal('show');
                         })
@@ -524,11 +523,7 @@
                         $("#value").val(data.data.value);
                         $("#text").val(data.data.text);
                         $("#orderNo").val(data.data.orderNo);
-                        $("#types option").each(function (i, e) {
-                            if ($(this).val() === data.data.typeId) {
-                                $(this).prop("selected", true);
-                            }
-                        });
+                        $("#types").val(data.data.typeId);
                     } else {
                         alert(data.msg);
                     }

@@ -383,6 +383,10 @@
         //todo 删除按钮
         $("#delBtn").click(function () {
             var ids = getIds();
+            if (ids.length <= 0) {
+                alert("未选中任意行");
+                return;
+            }
             if (confirm("是否删除这" + ids.length + "项?")) {
                 $.ajax({
                     url: "dictionaryType/del.action",

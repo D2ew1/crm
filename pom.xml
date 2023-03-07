@@ -21,6 +21,8 @@
         <junit-jupiter.version>5.8.2</junit-jupiter.version>
         <junit-platform-launcher.version>1.8.2</junit-platform-launcher.version>
         <jackson.version>2.14.1</jackson.version>
+        <jsr303.version>2.0.6</jsr303.version>
+        <validation-api.version>2.0.1.Final</validation-api.version>
         <maven.compiler.source>18</maven.compiler.source>
         <maven.compiler.target>18</maven.compiler.target>
     </properties>
@@ -168,5 +170,18 @@
             <version>${jackson.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.apache.bval/bval-jsr -->
+        <dependency>
+            <groupId>org.apache.bval</groupId>
+            <artifactId>bval-jsr</artifactId>
+            <version>${jsr303.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>${validation-api.version}</version>
+        </dependency>
     </dependencies>
 </project>

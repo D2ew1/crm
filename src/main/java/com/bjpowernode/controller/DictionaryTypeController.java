@@ -2,11 +2,19 @@ package com.bjpowernode.controller;
 
 import com.bjpowernode.beans.DictionaryType;
 import com.bjpowernode.dto.ResultDTO;
+import com.bjpowernode.exception.DBException;
+import com.bjpowernode.exception.CustException;
+import com.bjpowernode.exception.InputException;
 import com.bjpowernode.services.DictionaryTypeServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Dee
@@ -26,98 +34,67 @@ public class DictionaryTypeController {
     DictionaryTypeServices typeServices;
 
     @RequestMapping("getIds.action")
-    public ResultDTO getIds() {
+    public ResultDTO getIds() throws DBException {
 
         ResultDTO resultDTO = new ResultDTO();
-
-        ArrayList<String> ids = null;
-        ids = typeServices.getIds();
-        if (ids != null) {
-            resultDTO.setResult(true);
-            resultDTO.setData(ids);
-            resultDTO.setMsg("查询成功");
-        } else {
-            resultDTO.setResult(false);
-            resultDTO.setData(ids);
-            resultDTO.setMsg("查询失败");
-        }
-
+        ArrayList<String> ids = typeServices.getIds();
+        resultDTO.setResult(true);
+        resultDTO.setData(ids);
+        resultDTO.setMsg("查询成功");
         return resultDTO;
     }
 
     @RequestMapping("getAll.action")
-    public ResultDTO getAll() {
+    public ResultDTO getAll() throws DBException {
 
         ResultDTO resultDTO = new ResultDTO();
-
-        ArrayList<DictionaryType> dictionaryTypes = null;
-        dictionaryTypes = typeServices.getAll();
-        if (dictionaryTypes != null) {
-            resultDTO.setResult(true);
-            resultDTO.setData(dictionaryTypes);
-            resultDTO.setMsg("查询成功");
-        } else {
-            resultDTO.setResult(false);
-            resultDTO.setData(dictionaryTypes);
-            resultDTO.setMsg("查询失败");
-        }
-
+        ArrayList<DictionaryType> dictionaryTypes = typeServices.getAll();
+        resultDTO.setResult(true);
+        resultDTO.setData(dictionaryTypes);
+        resultDTO.setMsg("查询成功");
         return resultDTO;
     }
 
     @RequestMapping("get.action")
-    public ResultDTO get(String id) {
+    public ResultDTO get(String id) throws DBException {
 
         ResultDTO resultDTO = new ResultDTO();
-
-        DictionaryType dictionaryType = null;
-        dictionaryType = typeServices.get(id);
-        if (dictionaryType != null) {
-            resultDTO.setResult(true);
-            resultDTO.setData(dictionaryType);
-            resultDTO.setMsg("查询成功");
-        } else {
-            resultDTO.setResult(false);
-            resultDTO.setData(dictionaryType);
-            resultDTO.setMsg("无对应数据");
-        }
-
+        DictionaryType dictionaryType = typeServices.get(id);
+        resultDTO.setResult(true);
+        resultDTO.setData(dictionaryType);
+        resultDTO.setMsg("查询成功");
         return resultDTO;
     }
 
     @RequestMapping("add.action")
-    public ResultDTO add(@RequestBody DictionaryType dictionaryType) {
+    public ResultDTO add(@Valid @RequestBody DictionaryType dictionaryType, BindingResult bindingResult) throws DBException, InputException {
 
-        ResultDTO resultDTO = new ResultDTO();
-
-        if (typeServices.add(dictionaryType)) {
-            resultDTO.setResult(true);
-            resultDTO.setData(null);
-            resultDTO.setMsg("添加成功");
-        } else {
-            resultDTO.setResult(false);
-            resultDTO.setData(null);
-            resultDTO.setMsg("添加失败");
+        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+        for (FieldError fieldError : fieldErrors) {
+            throw new InputException(fieldError.getDefaultMessage());
         }
 
+        ResultDTO resultDTO = new ResultDTO();
+        typeServices.add(dictionaryType);
+        resultDTO.setResult(true);
+        resultDTO.setData(null);
+        resultDTO.setMsg("添加成功");
         return resultDTO;
     }
 
     @RequestMapping("edit.action")
-    public ResultDTO edit(@RequestBody DictionaryType dictionaryType) {
+    public ResultDTO edit(@Valid @RequestBody DictionaryType dictionaryType, BindingResult bindingResult) throws DBException, InputException {
 
-        ResultDTO resultDTO = new ResultDTO();
-
-        if (typeServices.edit(dictionaryType)) {
-            resultDTO.setResult(true);
-            resultDTO.setData(null);
-            resultDTO.setMsg("修改成功");
-        } else {
-            resultDTO.setResult(false);
-            resultDTO.setData(null);
-            resultDTO.setMsg("修改失败");
+        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+        for (FieldError fieldError : fieldErrors) {
+            throw new InputException(fieldError.getDefaultMessage());
         }
 
+        ResultDTO resultDTO = new ResultDTO();
+        typeServices.edit(dictionaryType);
+        resultDTO.setResult(true);
+        resultDTO.setData(null);
+        resultDTO.setMsg("修改成功");
         return resultDTO;
     }
 
@@ -128,20 +105,13 @@ public class DictionaryTypeController {
      * 可选参数 defaultValue为默认参数值
      */
     @RequestMapping("del.action")
-    public ResultDTO del(@RequestBody String[] ids) {
+    public ResultDTO del(@RequestBody String[] ids) throws DBException {
 
         ResultDTO resultDTO = new ResultDTO();
-
-        if (typeServices.del(ids)) {
-            resultDTO.setResult(true);
-            resultDTO.setData(null);
-            resultDTO.setMsg("删除成功");
-        } else {
-            resultDTO.setResult(false);
-            resultDTO.setData(null);
-            resultDTO.setMsg("删除失败");
-        }
-
+        typeServices.del(ids);
+        resultDTO.setResult(true);
+        resultDTO.setData(null);
+        resultDTO.setMsg("删除成功");
         return resultDTO;
     }
 }
