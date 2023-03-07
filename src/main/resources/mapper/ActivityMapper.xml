@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjpowernode.mapper.ActivityMapper">
+
+    <resultMap id="activityResultMap" type="com.bjpowernode.beans.Activity">
+        <id column="id" property="id"/>
+        <result column="ownerId" property="ownerId"/>
+        <result column="name" property="name"/>
+        <result column="startDate" property="startDate"/>
+        <result column="endDate" property="endDate"/>
+        <result column="cost" property="cost"/>
+        <result column="createById" property="createById"/>
+        <result column="createTime" property="createTime"/>
+        <result column="editById" property="editById"/>
+        <result column="editTime" property="editTime"/>
+        <association property="owner" javaType="com.bjpowernode.beans.User">
+            <result column="ownerId" property="id"/>
+            <result column="ownerName" property="name"/>
+        </association>
+        <association property="createBy" javaType="com.bjpowernode.beans.User">
+            <result column="createById" property="id"/>
+            <result column="createByName" property="name"/>
+        </association>
+        <association property="editBy" javaType="com.bjpowernode.beans.User">
+            <result column="editById" property="id"/>
+            <result column="editByName" property="name"/>
+        </association>
+    </resultMap>
+
+    <select id="getAll" resultMap="activityResultMap">
+        select
+        act.id,
+        act.ownerId,
+        owner.name as ownerName,
+        act.name,
+        act.startDate,
+        act.endDate,
+        act.cost,
+        act.createById,
+        createBy.name as createByName,
+        act.createTime,
+        act.editById,
+        editBy.name as editByName,
+        act.editTime
+        from tbl_marketing_activities as act inner join tbl_user as owner on act.ownerId = owner.id
+        inner join tbl_user as createBy on act.createById = createBy.id
+        left join tbl_user as editBy on act.editById = editBy.id
+    </select>
+</mapper>
