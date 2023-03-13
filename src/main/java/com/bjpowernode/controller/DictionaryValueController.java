@@ -1,6 +1,7 @@
 package com.bjpowernode.controller;
 
 import com.bjpowernode.beans.DictionaryValue;
+import com.bjpowernode.dto.Result;
 import com.bjpowernode.dto.ResultDTO;
 import com.bjpowernode.exception.DBException;
 import com.bjpowernode.exception.InputException;
@@ -32,7 +33,7 @@ public class DictionaryValueController {
 
         ResultDTO resultDTO = new ResultDTO();
         ArrayList<DictionaryValue> dictionaryValues = valueServices.getAll();
-        resultDTO.setResult(true);
+        resultDTO.setResult(Result.success);
         resultDTO.setData(dictionaryValues);
         resultDTO.setMsg("查询成功");
         return resultDTO;
@@ -43,7 +44,7 @@ public class DictionaryValueController {
 
         ResultDTO resultDTO = new ResultDTO();
         DictionaryValue dictionaryValue = valueServices.get(id);
-        resultDTO.setResult(true);
+        resultDTO.setResult(Result.success);
         resultDTO.setData(dictionaryValue);
         resultDTO.setMsg("查询成功");
         return resultDTO;
@@ -60,7 +61,7 @@ public class DictionaryValueController {
 
         ResultDTO resultDTO = new ResultDTO();
         valueServices.add(dictionaryValue);
-        resultDTO.setResult(true);
+        resultDTO.setResult(Result.success);
         resultDTO.setData(null);
         resultDTO.setMsg("添加成功");
         return resultDTO;
@@ -76,7 +77,7 @@ public class DictionaryValueController {
 
         ResultDTO resultDTO = new ResultDTO();
         valueServices.edit(dictionaryValue);
-        resultDTO.setResult(true);
+        resultDTO.setResult(Result.success);
         resultDTO.setData(null);
         resultDTO.setMsg("修改成功");
         return resultDTO;
@@ -87,7 +88,7 @@ public class DictionaryValueController {
 
         ResultDTO resultDTO = new ResultDTO();
         valueServices.del(ids);
-        resultDTO.setResult(true);
+        resultDTO.setResult(Result.success);
         resultDTO.setData(null);
         resultDTO.setMsg("删除成功");
         return resultDTO;

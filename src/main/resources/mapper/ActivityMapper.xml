@@ -4,10 +4,13 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bjpowernode.mapper.ActivityMapper">
 
+    <!-- <cache/> -->
+
     <resultMap id="activityResultMap" type="com.bjpowernode.beans.Activity">
         <id column="id" property="id"/>
         <result column="ownerId" property="ownerId"/>
         <result column="name" property="name"/>
+        <result column="description" property="description"/>
         <result column="startDate" property="startDate"/>
         <result column="endDate" property="endDate"/>
         <result column="cost" property="cost"/>
@@ -27,17 +30,46 @@
             <result column="editById" property="id"/>
             <result column="editByName" property="name"/>
         </association>
+        <!-- 评论列表 -->
     </resultMap>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) as amount
+        from tbl_marketing_activities as act inner join tbl_user as owner on act.ownerId = owner.id
+        inner join tbl_user as createBy on act.createById = createBy.id
+        left join tbl_user as editBy on act.editById = editBy.id
+    </select>
 
     <select id="getAll" resultMap="activityResultMap">
         select
         act.id,
-        act.ownerId,
-        owner.name as ownerName,
         act.name,
         act.startDate,
         act.endDate,
         act.cost,
+        act.ownerId,
+        owner.name as ownerName,
+        act.createById,
+        createBy.name as createByName,
+        act.editById,
+        editBy.name as editByName
+        from tbl_marketing_activities as act inner join tbl_user as owner on act.ownerId = owner.id
+        inner join tbl_user as createBy on act.createById = createBy.id
+        left join tbl_user as editBy on act.editById = editBy.id
+        order by act.name
+        limit #{index},#{offset}
+    </select>
+
+    <select id="get" resultMap="activityResultMap">
+        select
+        act.id,
+        act.name,
+        act.description,
+        act.startDate,
+        act.endDate,
+        act.cost,
+        act.ownerId,
+        owner.name as ownerName,
         act.createById,
         createBy.name as createByName,
         act.createTime,
@@ -47,5 +79,22 @@
         from tbl_marketing_activities as act inner join tbl_user as owner on act.ownerId = owner.id
         inner join tbl_user as createBy on act.createById = createBy.id
         left join tbl_user as editBy on act.editById = editBy.id
+        where act.id = #{id}
     </select>
+
+    <insert id="add">
+        insert into tbl_marketing_activities (id, ownerId, name, startDate, endDate, cost, description, createById,
+        createTime)
+        values (#{id}, #{ownerId}, #{name}, #{startDate}, #{endDate}, #{cost}, #{description}, #{createById},
+        #{createTime})
+    </insert>
+
+    <delete id="del">
+        delete from tbl_marketing_activities
+        where id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
 </mapper>

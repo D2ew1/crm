@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjpowernode.mapper.UserMapper">
+    <!-- 开启二级缓存 -->
+    <!-- <cache/> -->
+
+    <resultMap id="userResultMap" type="com.bjpowernode.beans.User">
+        <id column="id" property="id"/>
+        <result column="depId" property="depId"/>
+        <result column="loginAct" property="loginAct"/>
+        <result column="name" property="name"/>
+        <result column="loginPwd" property="loginPwd"/>
+        <result column="email" property="email"/>
+        <result column="expireTime" property="expireTime"/>
+        <result column="lockStatus" property="lockStatus"/>
+        <result column="allowIps" property="allowIps"/>
+        <result column="createById" property="createById"/>
+        <result column="createTime" property="createTime"/>
+        <result column="editById" property="editById"/>
+        <result column="editTime" property="editTime"/>
+        <association property="createBy" javaType="com.bjpowernode.beans.User">
+            <result column="createById" property="id"/>
+            <result column="createByName" property="name"/>
+        </association>
+        <association property="editBy" javaType="com.bjpowernode.beans.User">
+            <result column="editById" property="id"/>
+            <result column="editByName" property="name"/>
+        </association>
+    </resultMap>
+
+    <select id="getAll" resultMap="userResultMap">
+        select
+        usr.id,
+        usr.deptId,
+        usr.loginAct,
+        usr.name,
+        usr.loginPwd,
+        usr.email,
+        usr.expireTime,
+        usr.lockStatus,
+        usr.allowIps,
+        usr.createById,
+        createBy.name as createByName,
+        usr.createTime,
+        usr.editById,
+        editBy.name as editByName,
+        usr.editTime
+        from tbl_user as usr
+        left join tbl_user as createBy on usr.createById = createBy.id
+        left join tbl_user as editBy on usr.editById = editBy.id
+    </select>
+
+</mapper>

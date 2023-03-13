@@ -17,7 +17,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DictionaryType {
+public class DictionaryType implements Serializable {
     @NotNull(message = "字典类型编号不能为空")
     @NotEmpty(message = "字典类型编号不能为空")
     @NotBlank(message = "字典类型编号不能为空")

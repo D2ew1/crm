@@ -3,6 +3,9 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bjpowernode.mapper.DictionaryValueMapper">
+
+    <cache/>
+
     <resultMap id="dictValueResultMap" type="com.bjpowernode.beans.DictionaryValue">
         <id column="value_id" property="id"/>
         <result column="value" property="value"/>
@@ -21,22 +24,22 @@
         from tbl_dictionary_value inner join tbl_dictionary_type using(type_id)
     </sql>
 
-    <select id="getAll" resultMap="dictValueResultMap">
+    <select id="getAll" resultMap="dictValueResultMap" useCache="true">
         <include refid="dictValueInfo"/>
         order by type_id, orderNo
     </select>
 
-    <select id="get" resultMap="dictValueResultMap">
+    <select id="get" resultMap="dictValueResultMap" useCache="true">
         <include refid="dictValueInfo"/>
         where value_id = #{id}
     </select>
 
-    <insert id="add">
+    <insert id="add" flushCache="true">
         insert into tbl_dictionary_value (value_id, value, text, orderNo, type_id)
         values (#{id}, #{value}, #{text}, #{orderNo}, #{typeId})
     </insert>
 
-    <update id="edit">
+    <update id="edit" flushCache="true">
         update tbl_dictionary_value
         set
         value = #{value},
@@ -47,12 +50,19 @@
     </update>
 
     <!-- 批量删除 -->
-    <delete id="del">
+    <delete id="del" flushCache="true">
         delete from tbl_dictionary_value
         where value_id in
+        <!-- 单参且为数组时，collection可写为 array，实际上 mybatis也会将其封装为 map -->
+        <!-- 当传入多个参数时，需将参数封装成 map，collection值则为对应的 key -->
         <foreach collection="array" item="id" open="(" close=")" separator=",">
             #{id}
         </foreach>
     </delete>
 
+    <!-- 刷新缓存待定方案 -->
+    <delete id="flushCache" flushCache="true">
+        delete from tbl_dictionary_value
+        where 1 = 2
+    </delete>
 </mapper>

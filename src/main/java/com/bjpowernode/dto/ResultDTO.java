@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResultDTO {
-    private Boolean result;
+    private Result result;
     private Object data;
     private String msg;
 }

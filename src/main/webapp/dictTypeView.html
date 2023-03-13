@@ -108,6 +108,23 @@
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-th-list"></i>
+                            <p>
+                                活动管理
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="activityView.html" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>活动管理</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-user-circle"></i>
                             <p>
                                 用户中心
@@ -395,9 +412,11 @@
                     data: JSON.stringify(ids),
                     dataType: "json",
                     success: function (data, textStatus, jqXHR) {
-                        if (data.result === true) {
+                        if (data.result === "success") {
                             table.ajax.reload();
-                            $("#dictTypes thead :checkbox").prop("checked", false);
+                            var checkbox = $("#dictTypes thead :checkbox");
+                            checkbox.get(0).indeterminate = false;
+                            checkbox.prop("checked", false);
                         } else {
                             alert(data.msg);
                         }
@@ -430,10 +449,9 @@
                     }),
                     dataType: "json",
                     success: function (data, textStatus, jqXHR) {
-                        if (data.result === true) {
+                        if (data.result === "success") {
                             $("#dictTypeModal").modal("hide");
                             table.ajax.reload();
-                            $("#dictTypes thead :checkbox").prop("checked", false);
                         } else {
                             alert(data.msg);
                         }
@@ -453,10 +471,9 @@
                         "description": $("#description").val()
                     }),
                     success: function (data, textStatus, jqXHR) {
-                        if (data.result === true) {
+                        if (data.result === "success") {
                             $("#dictTypeModal").modal("hide");
                             table.ajax.reload();
-                            $("#dictTypes thead :checkbox").prop("checked", false);
                         } else {
                             alert(data.msg);
                         }
@@ -476,7 +493,7 @@
                 data: {"id": $(this).val()},
                 dataType: "json",
                 success: function (data, textStatus, jqXHR) {
-                    if (data.result === true) {
+                    if (data.result === "success") {
                         $("#dictTypeModal").data("type", "edit");
                         $("#dictTypeModal h4").text("修改字典类型");
                         $("#dictTypeModal").modal("show");

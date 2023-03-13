@@ -1,5 +1,6 @@
 package com.bjpowernode.services;
 
+import com.bjpowernode.beans.Page;
 import com.bjpowernode.exception.CustException;
 import com.bjpowernode.exception.DBException;
 

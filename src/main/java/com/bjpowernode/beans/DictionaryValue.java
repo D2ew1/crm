@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DictionaryValue {
+public class DictionaryValue implements Serializable {
     private String id;
     @NotNull(message = "字典数值名称不能为空")
     @NotEmpty(message = "字典数值名称不能为空")

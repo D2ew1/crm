@@ -3,6 +3,7 @@ package com.bjpowernode.services;
 import com.bjpowernode.beans.DictionaryType;
 import com.bjpowernode.exception.DBException;
 import com.bjpowernode.mapper.DictionaryTypeMapper;
+import com.bjpowernode.mapper.DictionaryValueMapper;
 import org.apache.ibatis.jdbc.SQL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -23,22 +24,25 @@ public class DictionaryTypeServicesImp implements DictionaryTypeServices {
     @Autowired
     DictionaryTypeMapper mapper;
 
-    @Override
-    public ArrayList<String> getIds() {
+    @Autowired
+    DictionaryValueMapper dictValueMapper;
 
-        ArrayList<String> ids = null;
+    @Override
+    public ArrayList<String> getNames() {
+
+        ArrayList<String> names = null;
         try {
-            ids = mapper.getIds();
+            names = mapper.getNames();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             throw new DBException("查询失败");
         }
 
-        if (ids == null) {
+        if (names == null) {
             throw new DBException("无相关数据");
         }
 
-        return ids;
+        return names;
     }
 
     @Override
@@ -102,6 +106,7 @@ public class DictionaryTypeServicesImp implements DictionaryTypeServices {
         int rows = 0;
         try {
             rows = mapper.edit(dictionaryType);
+            dictValueMapper.flushCache();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             throw new DBException("修改失败");

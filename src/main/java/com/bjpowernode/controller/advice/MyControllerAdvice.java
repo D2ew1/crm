@@ -1,5 +1,6 @@
 package com.bjpowernode.controller.advice;
 
+import com.bjpowernode.dto.Result;
 import com.bjpowernode.dto.ResultDTO;
 import com.bjpowernode.exception.DBException;
 import com.bjpowernode.exception.InputException;
@@ -24,7 +25,7 @@ public class MyControllerAdvice {
     @ExceptionHandler(DBException.class)
     public ResultDTO dbExcpHandler(DBException ex) {
         ResultDTO resultDTO = new ResultDTO();
-        resultDTO.setResult(false);
+        resultDTO.setResult(Result.error);
         resultDTO.setData(null);
         resultDTO.setMsg(ex.getMessage());
         return resultDTO;
@@ -33,7 +34,7 @@ public class MyControllerAdvice {
     @ExceptionHandler(InputException.class)
     public ResultDTO inputExcpHandler(InputException ex) {
         ResultDTO resultDTO = new ResultDTO();
-        resultDTO.setResult(false);
+        resultDTO.setResult(Result.error);
         resultDTO.setData(null);
         resultDTO.setMsg(ex.getMessage());
         return resultDTO;

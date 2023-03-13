@@ -108,6 +108,23 @@
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-th-list"></i>
+                            <p>
+                                活动管理
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="activityView.html" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>活动管理</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-user-circle"></i>
                             <p>
                                 用户中心
@@ -179,7 +196,6 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <input type="hidden" id="ids">
                         <table id="dictValues" class="table table-bordered table-hover">
                             <thead>
                             <tr>
@@ -188,7 +204,7 @@
                                 <th>名称</th>
                                 <th>描述</th>
                                 <th>序号</th>
-                                <th>类型编号</th>
+                                <th>所属类型</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
@@ -340,7 +356,7 @@
                 {"data": "value"},
                 {"data": "text"},
                 {"data": "orderNo"},
-                {"data": "typeId"},
+                {"data": "dictType.name"},
                 {"data": null}
             ],
             "columnDefs": [
@@ -372,16 +388,15 @@
             "order": [[5, 'asc'], [4, 'asc']]
         });
 
-        // 初始化 dictValueModal
         //todo 初始化模态框(由添加/修改按钮触发)
         function initModal(callback) {
             $.ajax({
-                url: "dictionaryType/getIds.action",
+                url: "dictionaryType/getNames.action",
                 type: "get",
                 dataType: "json",
                 async: false,
                 success: function (data, textStatus, jqXHR) {
-                    if (data.result === true) {
+                    if (data.result === "success") {
                         $("#types").empty();
                         $(data.data).each(function (i, e) {
                             // 需要把值用双引号包起来
@@ -416,9 +431,11 @@
                     data: JSON.stringify(ids),
                     dataType: "json",
                     success: function (data, textStatus, jqXHR) {
-                        if (data.result === true) {
+                        if (data.result === "success") {
                             table.ajax.reload();
-                            $("#dictValues thead :checkbox").prop("checked", false);
+                            var checkbox = $("#dictValues thead :checkbox");
+                            checkbox.get(0).indeterminate = false;
+                            checkbox.prop("checked", false);
                         } else {
                             alert(data.msg);
                         }
@@ -459,10 +476,9 @@
                         }),
                         dataType: "json",
                         success: function (data, textStatus, jqXHR) {
-                            if (data.result === true) {
+                            if (data.result === "success") {
                                 $("#dictValueModal").modal('hide');
                                 table.ajax.reload();
-                                $("#dictValues thead :checkbox").prop("checked", false);
                             } else {
                                 // 可以设置吐司弹窗
                                 alert(data.msg);
@@ -487,10 +503,9 @@
                     }),
                     dataType: "json",
                     success: function (data, textStatus, jqXHR) {
-                        if (data.result === true) {
+                        if (data.result === "success") {
                             $("#dictValueModal").modal('hide');
                             table.ajax.reload();
-                            $("#dictValues thead :checkbox").prop("checked", false);
                         } else {
                             alert(data.msg);
                         }
@@ -511,7 +526,7 @@
                 data: {"id": $(this).val()},
                 dataType: "json",
                 success: function (data, textStatus, jqXHR) {
-                    if (data.result === true) {
+                    if (data.result === "success") {
                         $("#dictValueModal").data("type", "edit");
                         $("#dictValueModal h4").text("修改字典数值");
                         // 注意：若initModal是异步的，则下面的赋值可能会在模态框初始化(下拉框渲染)完之前执行；所以要把initModal设置为同步执行；
@@ -523,7 +538,7 @@
                         $("#value").val(data.data.value);
                         $("#text").val(data.data.text);
                         $("#orderNo").val(data.data.orderNo);
-                        $("#types").val(data.data.typeId);
+                        $("#types").val(data.data.dictType.name);
                     } else {
                         alert(data.msg);
                     }

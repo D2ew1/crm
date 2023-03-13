@@ -1,6 +1,7 @@
 package com.bjpowernode.controller;
 
 import com.bjpowernode.beans.DictionaryType;
+import com.bjpowernode.dto.Result;
 import com.bjpowernode.dto.ResultDTO;
 import com.bjpowernode.exception.DBException;
 import com.bjpowernode.exception.CustException;
@@ -33,13 +34,13 @@ public class DictionaryTypeController {
     @Autowired
     DictionaryTypeServices typeServices;
 
-    @RequestMapping("getIds.action")
-    public ResultDTO getIds() throws DBException {
+    @RequestMapping("getNames.action")
+    public ResultDTO getNames() throws DBException {
 
         ResultDTO resultDTO = new ResultDTO();
-        ArrayList<String> ids = typeServices.getIds();
-        resultDTO.setResult(true);
-        resultDTO.setData(ids);
+        ArrayList<String> names = typeServices.getNames();
+        resultDTO.setResult(Result.success);
+        resultDTO.setData(names);
         resultDTO.setMsg("查询成功");
         return resultDTO;
     }
@@ -49,7 +50,7 @@ public class DictionaryTypeController {
 
         ResultDTO resultDTO = new ResultDTO();
         ArrayList<DictionaryType> dictionaryTypes = typeServices.getAll();
-        resultDTO.setResult(true);
+        resultDTO.setResult(Result.success);
         resultDTO.setData(dictionaryTypes);
         resultDTO.setMsg("查询成功");
         return resultDTO;
@@ -60,7 +61,7 @@ public class DictionaryTypeController {
 
         ResultDTO resultDTO = new ResultDTO();
         DictionaryType dictionaryType = typeServices.get(id);
-        resultDTO.setResult(true);
+        resultDTO.setResult(Result.success);
         resultDTO.setData(dictionaryType);
         resultDTO.setMsg("查询成功");
         return resultDTO;
@@ -76,7 +77,7 @@ public class DictionaryTypeController {
 
         ResultDTO resultDTO = new ResultDTO();
         typeServices.add(dictionaryType);
-        resultDTO.setResult(true);
+        resultDTO.setResult(Result.success);
         resultDTO.setData(null);
         resultDTO.setMsg("添加成功");
         return resultDTO;
@@ -92,7 +93,7 @@ public class DictionaryTypeController {
 
         ResultDTO resultDTO = new ResultDTO();
         typeServices.edit(dictionaryType);
-        resultDTO.setResult(true);
+        resultDTO.setResult(Result.success);
         resultDTO.setData(null);
         resultDTO.setMsg("修改成功");
         return resultDTO;
@@ -109,7 +110,7 @@ public class DictionaryTypeController {
 
         ResultDTO resultDTO = new ResultDTO();
         typeServices.del(ids);
-        resultDTO.setResult(true);
+        resultDTO.setResult(Result.success);
         resultDTO.setData(null);
         resultDTO.setMsg("删除成功");
         return resultDTO;
