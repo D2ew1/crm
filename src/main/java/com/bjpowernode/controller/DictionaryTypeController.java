@@ -1,6 +1,7 @@
 package com.bjpowernode.controller;
 
 import com.bjpowernode.beans.DictionaryType;
+import com.bjpowernode.dto.Page;
 import com.bjpowernode.dto.Result;
 import com.bjpowernode.dto.ResultDTO;
 import com.bjpowernode.exception.DBException;
@@ -34,17 +35,6 @@ public class DictionaryTypeController {
     @Autowired
     DictionaryTypeServices typeServices;
 
-    @RequestMapping("getNames.action")
-    public ResultDTO getNames() throws DBException {
-
-        ResultDTO resultDTO = new ResultDTO();
-        ArrayList<String> names = typeServices.getNames();
-        resultDTO.setResult(Result.success);
-        resultDTO.setData(names);
-        resultDTO.setMsg("查询成功");
-        return resultDTO;
-    }
-
     @RequestMapping("getAll.action")
     public ResultDTO getAll() throws DBException {
 
@@ -52,6 +42,17 @@ public class DictionaryTypeController {
         ArrayList<DictionaryType> dictionaryTypes = typeServices.getAll();
         resultDTO.setResult(Result.success);
         resultDTO.setData(dictionaryTypes);
+        resultDTO.setMsg("查询成功");
+        return resultDTO;
+    }
+
+    @RequestMapping("getPage.action")
+    public ResultDTO getPage(@RequestBody Page page) throws DBException {
+
+        ResultDTO resultDTO = new ResultDTO();
+        typeServices.getPage(page);
+        resultDTO.setResult(Result.success);
+        resultDTO.setData(page);
         resultDTO.setMsg("查询成功");
         return resultDTO;
     }

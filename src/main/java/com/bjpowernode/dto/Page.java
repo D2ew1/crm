@@ -1,4 +1,4 @@
-package com.bjpowernode.beans;
+package com.bjpowernode.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

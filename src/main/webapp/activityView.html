@@ -26,8 +26,6 @@
     <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
     <!-- DateTimePicker -->
     <link rel="stylesheet" href="plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css">
-    <!-- Bootstrap Pagination-->
-    <link rel="stylesheet" href="plugins/bs_pagination/jquery.bs_pagination.min.css">
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -268,8 +266,14 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-info">查询</button>
-                            <button type="submit" class="btn btn-warning">清空查询条件</button>
+                            <div class="row justify-content-end">
+                                <div class="col-sm-1">
+                                    <button type="submit" class="btn btn-info" id="queryBtn">查询</button>
+                                </div>
+                                <div class="col-sm-2" style="flex: 0 0 12.0%">
+                                    <button type="submit" class="btn btn-warning" id="clearCondBtn">清空查询条件</button>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -492,8 +496,9 @@
 <script src="plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
 <script src="plugins/bootstrap-datetimepicker/locale/bootstrap-datetimepicker.zh-CN.js"></script>
 <!-- Bootstrap Pagination-->
-<script src="plugins/bs_pagination/jquery.bs_pagination.js"></script>
-<script src="plugins/bs_pagination/en.js"></script>
+<script src="plugins/bs_pagination/js/jquery.bs_pagination.js"></script>
+<script src="plugins/bs_pagination/js/cn.js"></script>
+
 <script>
 
     $(function () {
@@ -802,6 +807,12 @@
             });
         });
 
+        //todo 条件查询
+        $("#queryBtn").click(function () {
+            $.ajax({
+                url:""
+            });
+        });
     });
 
     function getIds() {

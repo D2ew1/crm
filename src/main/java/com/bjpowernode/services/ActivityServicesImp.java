@@ -1,7 +1,7 @@
 package com.bjpowernode.services;
 
 import com.bjpowernode.beans.Activity;
-import com.bjpowernode.beans.Page;
+import com.bjpowernode.dto.Page;
 import com.bjpowernode.exception.DBException;
 import com.bjpowernode.mapper.ActivityMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +9,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -27,11 +25,6 @@ public class ActivityServicesImp implements ActivityServices {
 
     @Autowired
     ActivityMapper mapper;
-
-    @Override
-    public ArrayList<Activity> getAll() throws DBException {
-        return null;
-    }
 
     @Override
     public void getPage(Page page) throws DBException {
@@ -53,7 +46,7 @@ public class ActivityServicesImp implements ActivityServices {
 
         ArrayList<Activity> activities = null;
         try {
-            activities = mapper.getAll(index, offset);
+            activities = mapper.getPage(index, offset);
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             throw new DBException("≤È—Ø ß∞‹");

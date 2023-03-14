@@ -6,5 +6,5 @@ import com.bjpowernode.exception.DBException;
 import java.util.ArrayList;
 
 public interface DictionaryTypeServices extends BaseServices<DictionaryType, String> {
-    ArrayList<String> getNames() throws DBException;
+    ArrayList<DictionaryType> getAll() throws DBException;
 }

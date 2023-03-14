@@ -1,6 +1,7 @@
 package com.bjpowernode.controller;
 
 import com.bjpowernode.beans.DictionaryValue;
+import com.bjpowernode.dto.Page;
 import com.bjpowernode.dto.Result;
 import com.bjpowernode.dto.ResultDTO;
 import com.bjpowernode.exception.DBException;
@@ -28,13 +29,13 @@ public class DictionaryValueController {
     @Autowired
     DictionaryValueServices valueServices;
 
-    @RequestMapping("getAll.action")
-    public ResultDTO getAll() throws DBException {
+    @RequestMapping("getPage.action")
+    public ResultDTO getPage(@RequestBody Page page) throws DBException {
 
         ResultDTO resultDTO = new ResultDTO();
-        ArrayList<DictionaryValue> dictionaryValues = valueServices.getAll();
+        valueServices.getPage(page);
         resultDTO.setResult(Result.success);
-        resultDTO.setData(dictionaryValues);
+        resultDTO.setData(page);
         resultDTO.setMsg("≤È—Ø≥…π¶");
         return resultDTO;
     }

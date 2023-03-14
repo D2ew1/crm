@@ -3,8 +3,6 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bjpowernode.mapper.UserMapper">
-    <!-- 开启二级缓存 -->
-    <!-- <cache/> -->
 
     <resultMap id="userResultMap" type="com.bjpowernode.beans.User">
         <id column="id" property="id"/>
@@ -31,25 +29,10 @@
     </resultMap>
 
     <select id="getAll" resultMap="userResultMap">
-        select
-        usr.id,
-        usr.deptId,
-        usr.loginAct,
-        usr.name,
-        usr.loginPwd,
-        usr.email,
-        usr.expireTime,
-        usr.lockStatus,
-        usr.allowIps,
-        usr.createById,
-        createBy.name as createByName,
-        usr.createTime,
-        usr.editById,
-        editBy.name as editByName,
-        usr.editTime
-        from tbl_user as usr
-        left join tbl_user as createBy on usr.createById = createBy.id
-        left join tbl_user as editBy on usr.editById = editBy.id
+        select id, name
+        from tbl_user
+        order by id
     </select>
+
 
 </mapper>

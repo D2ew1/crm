@@ -15,13 +15,11 @@
     <link rel="stylesheet" href="dist/css/adminlte.min.css"/>
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css"/>
-
     <!-- DataTables -->
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-select/css/select.bootstrap4.min.css">
-
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
 </head>
@@ -196,21 +194,29 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <table id="dictValues" class="table table-bordered table-hover">
-                            <thead>
-                            <tr>
-                                <th><input type="checkbox"></th>
-                                <th>编号</th>
-                                <th>名称</th>
-                                <th>描述</th>
-                                <th>序号</th>
-                                <th>所属类型</th>
-                                <th>操作</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
+                        <div class="card">
+                            <div class="card-body table-responsive p-1">
+                                <table id="dictValues" class="table table-bordered table-hover" data-currentpage="1"
+                                       data-rowsperpage="10">
+                                    <thead>
+                                    <tr>
+                                        <th><input type="checkbox"></th>
+                                        <th>编号</th>
+                                        <th>名称</th>
+                                        <th>描述</th>
+                                        <th>序号</th>
+                                        <th>所属类型</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card-footer" style="background-color: #ffffff">
+                                <div id="pages"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!-- /.rows -->
@@ -322,14 +328,19 @@
 <script src="plugins/pdfmake/vfs_fonts.js"></script>
 <!-- SweetAlert2 -->
 <script src="plugins/sweetalert2/sweetalert2.min.js"></script>
+<!-- Bootstrap Pagination-->
+<script src="plugins/bs_pagination/js/jquery.bs_pagination.js"></script>
+<script src="plugins/bs_pagination/js/cn.js"></script>
 
 <script>
 
     $(function () {
 
         //todo 初始化表格
+        var dictValues = $("#dictValues");
         var table = $("#dictValues").DataTable({
-            "paging": true,
+            "paging": false,
+            "serverSide": true,
             // 分页由后台处理
             // "serverSide": true,
             // 换页后更新全选复选框状态
@@ -339,15 +350,47 @@
             //     $("tbody :checkbox").prop("checked", false);
             // },
             "lengthChange": true,
-            "searching": true,
+            "searching": false,
             "ordering": true,
-            "info": true,
-            "autoWidth": true,
+            "info": false,
+            "autoWidth": false,
             "responsive": true,
             "ajax": {
-                url: "dictionaryValue/getAll.action",
-                type: "get",
+                url: "dictionaryValue/getPage.action",
+                type: "post",
+                contentType: "application/json; charset=UTF-8",
+                data: function () {
+                    return JSON.stringify({
+                        "currentPage": dictValues.attr("data-currentpage"),
+                        "rowsPerPage": dictValues.attr("data-rowsperpage")
+                    });
+                },
                 dataType: "json",
+                dataSrc: function (data) {
+                    if (data.result === "success") {
+                        $("#pages").bs_pagination({
+                            currentPage: data.data.currentPage,
+                            rowsPerPage: data.data.rowsPerPage,
+                            maxRowsPerPage: data.data.maxRowsPerPage,
+                            totalRows: data.data.totalRows,
+                            totalPages: data.data.totalPages,
+                            visiblePageLinks: data.data.visiblePageLinks,
+                            showGoToPage: true,
+                            showRowsPerPage: true,
+                            showRowsInfo: true,
+                            showRowsDefaultInfo: true,
+                            onChangePage: function (event, data) {
+                                dictValues.attr("data-currentpage", data.currentPage);
+                                dictValues.attr("data-rowsperpage", data.rowsPerPage);
+                                dictValues.DataTable().ajax.reload();
+                            }
+                        });
+                        return data.data.data;
+                    } else {
+                        alert(data.msg);
+                        return null;
+                    }
+                },
                 async: false
             },
             "columns": [
@@ -360,6 +403,10 @@
                 {"data": null}
             ],
             "columnDefs": [
+                {
+                    "targets": "_all",
+                    "defaultContent": ""
+                },
                 {
                     "targets": 0,
                     /**
@@ -391,7 +438,7 @@
         //todo 初始化模态框(由添加/修改按钮触发)
         function initModal(callback) {
             $.ajax({
-                url: "dictionaryType/getNames.action",
+                url: "dictionaryType/getAll.action",
                 type: "get",
                 dataType: "json",
                 async: false,
@@ -400,7 +447,7 @@
                         $("#types").empty();
                         $(data.data).each(function (i, e) {
                             // 需要把值用双引号包起来
-                            var option = $("<option value='" + e + "'>" + e + "</option>");
+                            var option = $("<option value='" + e.id + "'>" + e.name + "</option>");
                             $("#types").append(option);
                         })
                         callback();

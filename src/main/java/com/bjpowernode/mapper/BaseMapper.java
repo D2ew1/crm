@@ -1,8 +1,6 @@
 package com.bjpowernode.mapper;
 
-import com.bjpowernode.beans.Page;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.jdbc.SQL;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.BadSqlGrammarException;
@@ -15,6 +13,8 @@ public interface BaseMapper<T, I> {
     Integer count() throws SQLException;
 
     ArrayList<T> getAll() throws SQLException;
+
+    ArrayList<T> getPage(@Param("index") Integer index, @Param("offset") Integer offset) throws SQLException;
 
     T get(I id) throws SQLException;
 

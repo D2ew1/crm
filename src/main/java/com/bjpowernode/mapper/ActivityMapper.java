@@ -7,5 +7,5 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface ActivityMapper extends BaseMapper<Activity, String> {
-    ArrayList<Activity> getAll(@Param("index") Integer index, @Param("offset") Integer offset) throws SQLException;
+
 }

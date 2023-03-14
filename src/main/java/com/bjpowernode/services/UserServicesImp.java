@@ -1,6 +1,7 @@
 package com.bjpowernode.services;
 
 import com.bjpowernode.beans.User;
+import com.bjpowernode.dto.Page;
 import com.bjpowernode.exception.DBException;
 import com.bjpowernode.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,11 @@ public class UserServicesImp implements UserServices {
         }
 
         return users;
+    }
+
+    @Override
+    public void getPage(Page page) throws DBException {
+
     }
 
     @Override

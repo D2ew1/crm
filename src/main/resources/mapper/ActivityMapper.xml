@@ -4,8 +4,6 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bjpowernode.mapper.ActivityMapper">
 
-    <!-- <cache/> -->
-
     <resultMap id="activityResultMap" type="com.bjpowernode.beans.Activity">
         <id column="id" property="id"/>
         <result column="ownerId" property="ownerId"/>
@@ -40,7 +38,7 @@
         left join tbl_user as editBy on act.editById = editBy.id
     </select>
 
-    <select id="getAll" resultMap="activityResultMap">
+    <select id="getPage" resultMap="activityResultMap">
         select
         act.id,
         act.name,

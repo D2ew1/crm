@@ -6,5 +6,4 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface DictionaryTypeMapper extends BaseMapper<DictionaryType, String> {
-    ArrayList<String> getNames() throws SQLException;
 }

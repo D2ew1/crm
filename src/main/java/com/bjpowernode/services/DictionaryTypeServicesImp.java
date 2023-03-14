@@ -1,6 +1,7 @@
 package com.bjpowernode.services;
 
 import com.bjpowernode.beans.DictionaryType;
+import com.bjpowernode.dto.Page;
 import com.bjpowernode.exception.DBException;
 import com.bjpowernode.mapper.DictionaryTypeMapper;
 import com.bjpowernode.mapper.DictionaryValueMapper;
@@ -10,6 +11,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -24,26 +26,8 @@ public class DictionaryTypeServicesImp implements DictionaryTypeServices {
     @Autowired
     DictionaryTypeMapper mapper;
 
-    @Autowired
-    DictionaryValueMapper dictValueMapper;
-
-    @Override
-    public ArrayList<String> getNames() {
-
-        ArrayList<String> names = null;
-        try {
-            names = mapper.getNames();
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            throw new DBException("查询失败");
-        }
-
-        if (names == null) {
-            throw new DBException("无相关数据");
-        }
-
-        return names;
-    }
+    // @Autowired
+    // DictionaryValueMapper dictValueMapper;
 
     @Override
     public ArrayList<DictionaryType> getAll() {
@@ -61,6 +45,40 @@ public class DictionaryTypeServicesImp implements DictionaryTypeServices {
         }
 
         return dictionaryTypes;
+    }
+
+    @Override
+    public void getPage(Page page) throws DBException {
+
+        Integer offset = page.getRowsPerPage();
+        Integer index = (page.getCurrentPage() - 1) * offset;
+        Integer amount = 0;
+        try {
+            amount = mapper.count();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+
+        page.setTotalRows(amount);
+        if (amount % offset == 0) {
+            page.setTotalPages(amount / offset);
+        } else {
+            page.setTotalPages(amount / offset + 1);
+        }
+
+        ArrayList<DictionaryType> dictionaryTypes = null;
+        try {
+            dictionaryTypes = mapper.getPage(index, offset);
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new DBException("查询失败");
+        }
+
+        if (dictionaryTypes == null) {
+            throw new DBException("无相关数据");
+        }
+
+        page.setData(dictionaryTypes);
     }
 
     @Override
@@ -106,7 +124,7 @@ public class DictionaryTypeServicesImp implements DictionaryTypeServices {
         int rows = 0;
         try {
             rows = mapper.edit(dictionaryType);
-            dictValueMapper.flushCache();
+            // dictValueMapper.flushCache();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             throw new DBException("修改失败");
