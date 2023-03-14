@@ -24,10 +24,7 @@ public class Page implements Serializable {
     private Integer maxRowsPerPage = 100;
     private Integer totalRows;
     private Integer totalPages;
-    /**
-     * 翻页插件的可见页数
-     */
-    private Integer visiblePageLinks = 10;
+    private Integer visiblePageLinks = 5;
     private List data;
     /**
      * 查询条件(待定)

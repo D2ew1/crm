@@ -278,7 +278,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-body table-responsive p-0">
+                            <div class="card-body table-responsive p-1">
                                 <!-- data属性要求键名全小写 -->
                                 <table id="activities" class="table table-bordered table-hover" data-currentpage="1"
                                        data-rowsperpage="10">
@@ -299,7 +299,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="card-footer">
+                            <div class="card-footer" style="background-color: #ffffff">
                                 <!-- 翻页 -->
                                 <div id="pages"></div>
                             </div>
@@ -492,7 +492,7 @@
 <script src="plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
 <script src="plugins/bootstrap-datetimepicker/locale/bootstrap-datetimepicker.zh-CN.js"></script>
 <!-- Bootstrap Pagination-->
-<script src="plugins/bs_pagination/jquery.bs_pagination.min.js"></script>
+<script src="plugins/bs_pagination/jquery.bs_pagination.js"></script>
 <script src="plugins/bs_pagination/en.js"></script>
 <script>
 
@@ -546,11 +546,12 @@
         var activities = $("#activities");
         var table = activities.DataTable({
             "paging": false,
-            "lengthChange": false,
+            "serverSide": true,
+            "lengthChange": true,
             "searching": false,
             "ordering": true,
             "info": false,
-            "autoWidth": true,
+            "autoWidth": false,
             "responsive": true,
             /**
              * dataTable中的(option)ajax可接收三种类型的参数:
@@ -577,8 +578,6 @@
                 // },
                 dataType: "json",
                 dataSrc: function (data) {
-                    console.log(typeof data.result);
-                    console.log(data.result);
                     if (data.result === "success") {
                         $("#pages").bs_pagination({
                             currentPage: data.data.currentPage,
@@ -690,6 +689,7 @@
                     success: function (data, textStatus, jqXHR) {
                         if (data.result === "success") {
                             table.ajax.reload();
+
                             var checkbox = $("#activities thead :checkbox");
                             checkbox.get(0).indeterminate = false;
                             checkbox.prop("checked", false);
