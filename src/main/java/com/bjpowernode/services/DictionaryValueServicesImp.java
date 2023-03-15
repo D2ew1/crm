@@ -47,7 +47,7 @@ public class DictionaryValueServicesImp implements DictionaryValueServices {
             totalPages = amount / offset + 1;
         }
         page.setTotalPages(totalPages);
-        if (currentPage > totalPages) {
+        if (totalPages > 0 && currentPage > totalPages) {
             currentPage = totalPages;
             page.setCurrentPage(currentPage);
         }

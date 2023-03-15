@@ -48,7 +48,7 @@ public class ActivityServicesImp implements ActivityServices {
         }
         page.setTotalPages(totalPages);
         // 当尾页全删除后执行 reload()时
-        if (currentPage > totalPages) {
+        if (totalPages > 0 && currentPage > totalPages) {
             currentPage = totalPages;
             page.setCurrentPage(currentPage);
         }

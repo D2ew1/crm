@@ -557,61 +557,6 @@
             pickerPosition: "bottom-right"
         }).prop("readonly", true).css("cursor", "default");
 
-        // 分页查询参数
-        var option = {
-            url: "activity/getPage.action",
-            type: "post",
-            /**
-             * 使用 DataTable().ajax.reload()刷新表格时，对于动态参数不能用 JSON格式，而应用 function()；
-             */
-            contentType: "application/json; charset=UTF-8",
-            data: function () {
-                return JSON.stringify({
-                    "currentPage": activities.attr("data-currentpage"),
-                    "rowsPerPage": activities.attr("data-rowsperpage"),
-                    "queryCond": {
-                        "name": $("#name-query").val(),
-                        "cost": $("#cost-query").val(),
-                        "ownerId": $("#owner-query").val(),
-                        "createById": $("#createBy-query").val(),
-                        "editById": $("#editBy-query").val(),
-                        "startDate": $("#startDate-query").val(),
-                        "endDate": $("#endDate-query").val()
-                    }
-                });
-            },
-            // dataFilter: function (data, type) {
-            //
-            // },
-            dataType: "json",
-            dataSrc: function (data) {
-                if (data.result === "success") {
-                    $("#pages").bs_pagination({
-                        currentPage: data.data.currentPage,
-                        rowsPerPage: data.data.rowsPerPage,
-                        maxRowsPerPage: data.data.maxRowsPerPage,
-                        totalRows: data.data.totalRows,
-                        totalPages: data.data.totalPages,
-                        visiblePageLinks: data.data.visiblePageLinks,
-                        showGoToPage: true,
-                        showRowsPerPage: true,
-                        showRowsInfo: true,
-                        showRowsDefaultInfo: true,
-                        onChangePage: function (event, data) {
-                            activities.attr("data-currentpage", data.currentPage);
-                            activities.attr("data-rowsperpage", data.rowsPerPage);
-                            activities.DataTable().ajax.reload();
-                        }
-                    });
-                    return data.data.data;
-                } else {
-                    alert(data.msg);
-                    return null;
-                }
-            },
-            async: false
-        };
-
         //todo 初始化表格
         var activities = $("#activities");
         var table = activities.DataTable({
@@ -630,7 +575,59 @@
              * function:自定义获取数据的方法；
              * 详情见: https://datatables.club/reference/option/ajax
              */
-            "ajax": option,
+            "ajax": {
+                url: "activity/getPage.action",
+                type: "post",
+                /**
+                 * 使用 DataTable().ajax.reload()刷新表格时，对于动态参数不能用 JSON格式，而应用 function()；
+                 */
+                contentType: "application/json; charset=UTF-8",
+                data: function () {
+                    return JSON.stringify({
+                        "currentPage": activities.attr("data-currentpage"),
+                        "rowsPerPage": activities.attr("data-rowsperpage"),
+                        "queryCond": {
+                            "name": $("#name-query").val(),
+                            "cost": $("#cost-query").val(),
+                            "ownerId": $("#owner-query").val(),
+                            "createById": $("#createBy-query").val(),
+                            "editById": $("#editBy-query").val(),
+                            "startDate": $("#startDate-query").val(),
+                            "endDate": $("#endDate-query").val()
+                        }
+                    });
+                },
+                // dataFilter: function (data, type) {
+                //
+                // },
+                dataType: "json",
+                dataSrc: function (data) {
+                    if (data.result === "success") {
+                        $("#pages").bs_pagination({
+                            currentPage: data.data.currentPage,
+                            rowsPerPage: data.data.rowsPerPage,
+                            maxRowsPerPage: data.data.maxRowsPerPage,
+                            totalRows: data.data.totalRows,
+                            totalPages: data.data.totalPages,
+                            visiblePageLinks: data.data.visiblePageLinks,
+                            showGoToPage: true,
+                            showRowsPerPage: true,
+                            showRowsInfo: true,
+                            showRowsDefaultInfo: true,
+                            onChangePage: function (event, data) {
+                                activities.attr("data-currentpage", data.currentPage);
+                                activities.attr("data-rowsperpage", data.rowsPerPage);
+                                activities.DataTable().ajax.reload();
+                            }
+                        });
+                        return data.data.data;
+                    } else {
+                        alert(data.msg);
+                        return null;
+                    }
+                },
+                async: false
+            },
             "columns": [
                 {"data": null},
                 {"data": null},
@@ -672,9 +669,21 @@
             "order": [[1, 'asc']]
         });
 
-        //todo 查询按钮
+        //todo 条件查询按钮
         $("#queryBtn").click(function () {
-            $.ajax(option);
+            table.ajax.reload();
+        });
+
+        //todo 清除条件按钮
+        $("#clearCondBtn").click(function () {
+            $("#name-query").val("");
+            $("#cost-query").val("");
+            $("#owner-query").val("-1");
+            $("#createBy-query").val("-1");
+            $("#editBy-query").val("-1");
+            $("#startDate-query").val("");
+            $("#endDate-query").val("");
+            table.ajax.reload();
         });
 
         //todo 初始化模态框(由添加/修改按钮触发)
@@ -833,12 +842,6 @@
             });
         });
 
-        //todo 条件查询
-        $("#queryBtn").click(function () {
-            $.ajax({
-                url: ""
-            });
-        });
     });
 
     function getIds() {
