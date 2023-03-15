@@ -334,26 +334,33 @@
 
 <script>
 
+    // DataTable中文排序
+    jQuery.fn.dataTableExt.oSort['chinese-sort-asc'] = function (s1, s2) {
+        return s1.localeCompare(s2);
+    };
+    jQuery.fn.dataTableExt.oSort['chinese-sort-desc'] = function (s1, s2) {
+        return s2.localeCompare(s1);
+    };
+
     $(function () {
 
         //todo 初始化表格
         var dictValues = $("#dictValues");
         var table = $("#dictValues").DataTable({
             "paging": false,
-            "serverSide": true,
             // 分页由后台处理
-            // "serverSide": true,
+            "serverSide": false,
             // 换页后更新全选复选框状态
             // This function is called on every 'draw' event.
             // "fnDrawCallback": function () {
             //     $("thead :checkbox").prop("checked", false);
             //     $("tbody :checkbox").prop("checked", false);
             // },
-            "lengthChange": true,
+            "lengthChange": false,
             "searching": false,
             "ordering": true,
             "info": false,
-            "autoWidth": false,
+            "autoWidth": true,
             "responsive": true,
             "ajax": {
                 url: "dictionaryValue/getPage.action",
@@ -396,10 +403,10 @@
             "columns": [
                 {"data": null},
                 {"data": "id"},
-                {"data": "value"},
-                {"data": "text"},
+                {"data": "value", "sType": "chinese-sort"},
+                {"data": "text", "sType": "chinese-sort"},
                 {"data": "orderNo"},
-                {"data": "dictType.name"},
+                {"data": "dictType.name", "sType": "chinese-sort"},
                 {"data": null}
             ],
             "columnDefs": [
@@ -504,7 +511,6 @@
                 $("#value").val("");
                 $("#text").val("");
                 $("#orderNo").val("");
-                $("#types option:first").prop("selected", true);
             })
         });
 
@@ -585,7 +591,8 @@
                         $("#value").val(data.data.value);
                         $("#text").val(data.data.text);
                         $("#orderNo").val(data.data.orderNo);
-                        $("#types").val(data.data.dictType.name);
+                        // 对于<select>只能赋其子组件<option>中的 value属性值；
+                        $("#types").val(data.data.dictType.id);
                     } else {
                         alert(data.msg);
                     }

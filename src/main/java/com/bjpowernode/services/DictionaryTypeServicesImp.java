@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * @author Dee
@@ -51,24 +52,31 @@ public class DictionaryTypeServicesImp implements DictionaryTypeServices {
     public void getPage(Page page) throws DBException {
 
         Integer offset = page.getRowsPerPage();
-        Integer index = (page.getCurrentPage() - 1) * offset;
+        Integer currentPage = page.getCurrentPage();
+        Map<String, Object> queryCond = page.getQueryCond();
         Integer amount = 0;
         try {
-            amount = mapper.count();
+            amount = mapper.count(queryCond);
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
-
         page.setTotalRows(amount);
+        Integer totalPages = 0;
         if (amount % offset == 0) {
-            page.setTotalPages(amount / offset);
+            totalPages = amount / offset;
         } else {
-            page.setTotalPages(amount / offset + 1);
+            totalPages = amount / offset + 1;
         }
+        page.setTotalPages(totalPages);
+        if (currentPage > totalPages) {
+            currentPage = totalPages;
+            page.setCurrentPage(currentPage);
+        }
+        Integer index = (currentPage - 1) * offset;
 
         ArrayList<DictionaryType> dictionaryTypes = null;
         try {
-            dictionaryTypes = mapper.getPage(index, offset);
+            dictionaryTypes = mapper.getPage(index, offset, queryCond);
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             throw new DBException("≤È—Ø ß∞‹");

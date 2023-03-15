@@ -31,11 +31,38 @@
         <!-- 评论列表 -->
     </resultMap>
 
+    <sql id="queryCond">
+        <where>
+            <if test="queryCond.name != null and queryCond.name != ''">
+                and act.name like concat('%', #{queryCond.name}, '%')
+            </if>
+            <if test="queryCond.cost != null and queryCond.cost != ''">
+                and act.cost = #{queryCond.cost}
+            </if>
+            <if test="queryCond.ownerId != null and queryCond.ownerId != '-1'">
+                and act.ownerId = #{queryCond.ownerId}
+            </if>
+            <if test="queryCond.createById != null and queryCond.createById != '-1'">
+                and act.createById = #{queryCond.createById}
+            </if>
+            <if test="queryCond.editById != null and queryCond.editById != '-1'">
+                and act.editById = #{queryCond.editById}
+            </if>
+            <if test="queryCond.startDate != null and queryCond.startDate != ''">
+                and act.startDate = #{queryCond.startDate}
+            </if>
+            <if test="queryCond.endDate != null and queryCond.endDate != ''">
+                and act.endDate = #{queryCond.endDate}
+            </if>
+        </where>
+    </sql>
+
     <select id="count" resultType="java.lang.Integer">
         select count(*) as amount
         from tbl_marketing_activities as act inner join tbl_user as owner on act.ownerId = owner.id
         inner join tbl_user as createBy on act.createById = createBy.id
         left join tbl_user as editBy on act.editById = editBy.id
+        <include refid="queryCond"/>
     </select>
 
     <select id="getPage" resultMap="activityResultMap">
@@ -54,7 +81,8 @@
         from tbl_marketing_activities as act inner join tbl_user as owner on act.ownerId = owner.id
         inner join tbl_user as createBy on act.createById = createBy.id
         left join tbl_user as editBy on act.editById = editBy.id
-        order by act.name
+        <include refid="queryCond"/>
+        order by convert(act.name using gbk)
         limit #{index},#{offset}
     </select>
 

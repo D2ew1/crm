@@ -46,7 +46,7 @@ public class ActivityController {
     }
 
     @RequestMapping("add.action")
-    public ResultDTO add(Activity activity) throws DBException, InputException {
+    public ResultDTO add(@RequestBody Activity activity) throws DBException, InputException {
 
         ResultDTO resultDTO = new ResultDTO();
         activityServices.add(activity);

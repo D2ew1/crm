@@ -205,43 +205,19 @@
                             <div class="row">
                                 <div class="col-sm-4">
                                     <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">活动名称</label>
+                                        <label class="col-sm-3 col-form-label" for="name-query">活动名称</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" placeholder="请输入活动名称">
+                                            <input type="text" class="form-control" id="name-query"
+                                                   placeholder="请输入活动名称">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">活动成本</label>
+                                        <label class="col-sm-3 col-form-label" for="cost-query">活动成本</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" placeholder="请输入活动成本">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">活动所有者</label>
-                                        <div class="col-sm-9">
-                                            <select class="custom-select" id="owner"></select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">活动发起者</label>
-                                        <div class="col-sm-9">
-                                            <select class="custom-select" id="createBy"></select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">活动修改者</label>
-                                        <div class="col-sm-9">
-                                            <select class="custom-select" id="editBy"></select>
+                                            <input type="text" class="form-control" id="cost-query"
+                                                   placeholder="请输入活动成本">
                                         </div>
                                     </div>
                                 </div>
@@ -249,17 +225,43 @@
                             <div class="row">
                                 <div class="col-sm-4">
                                     <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">开始日期</label>
+                                        <label class="col-sm-3 col-form-label" for="owner-query">活动所有者</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" date>
+                                            <select class="custom-select" id="owner-query"></select>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">结束日期</label>
+                                        <label class="col-sm-3 col-form-label" for="createBy-query">活动发起者</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" date>
+                                            <select class="custom-select" id="createBy-query"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label" for="editBy-query">活动修改者</label>
+                                        <div class="col-sm-9">
+                                            <select class="custom-select" id="editBy-query"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label" for="startDate-query">开始日期</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="startDate-query" date>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label" for="endDate-query">结束日期</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="endDate-query" date>
                                         </div>
                                     </div>
                                 </div>
@@ -268,10 +270,10 @@
                         <div class="card-footer">
                             <div class="row justify-content-end">
                                 <div class="col-sm-1">
-                                    <button type="submit" class="btn btn-info" id="queryBtn">查询</button>
+                                    <button type="button" class="btn btn-info" id="queryBtn">查询</button>
                                 </div>
                                 <div class="col-sm-2" style="flex: 0 0 12.0%">
-                                    <button type="submit" class="btn btn-warning" id="clearCondBtn">清空查询条件</button>
+                                    <button type="button" class="btn btn-warning" id="clearCondBtn">清空查询条件</button>
                                 </div>
                             </div>
                         </div>
@@ -501,6 +503,14 @@
 
 <script>
 
+    // DataTable中文排序
+    jQuery.fn.dataTableExt.oSort['chinese-sort-asc'] = function (s1, s2) {
+        return s1.localeCompare(s2);
+    };
+    jQuery.fn.dataTableExt.oSort['chinese-sort-desc'] = function (s1, s2) {
+        return s2.localeCompare(s1);
+    };
+
     $(function () {
 
         //todo 初始化查询条件框
@@ -512,13 +522,13 @@
             success: function (data, textStatus, jqXHR) {
                 if (data.result === "success") {
                     // 一个标签只能有一个归属，不能同时归属于三个组件；
-                    var owner = $("#owner");
+                    var owner = $("#owner-query");
                     owner.empty();
                     owner.append("<option value='-1'>请选择</option>");
-                    var createBy = $("#createBy");
+                    var createBy = $("#createBy-query");
                     createBy.empty();
                     createBy.append("<option value='-1'>请选择</option>");
-                    var editBy = $("#editBy");
+                    var editBy = $("#editBy-query");
                     editBy.empty();
                     editBy.append("<option value='-1'>请选择</option>");
                     $(data.data).each(function (i, e) {
@@ -547,17 +557,72 @@
             pickerPosition: "bottom-right"
         }).prop("readonly", true).css("cursor", "default");
 
+        // 分页查询参数
+        var option = {
+            url: "activity/getPage.action",
+            type: "post",
+            /**
+             * 使用 DataTable().ajax.reload()刷新表格时，对于动态参数不能用 JSON格式，而应用 function()；
+             */
+            contentType: "application/json; charset=UTF-8",
+            data: function () {
+                return JSON.stringify({
+                    "currentPage": activities.attr("data-currentpage"),
+                    "rowsPerPage": activities.attr("data-rowsperpage"),
+                    "queryCond": {
+                        "name": $("#name-query").val(),
+                        "cost": $("#cost-query").val(),
+                        "ownerId": $("#owner-query").val(),
+                        "createById": $("#createBy-query").val(),
+                        "editById": $("#editBy-query").val(),
+                        "startDate": $("#startDate-query").val(),
+                        "endDate": $("#endDate-query").val()
+                    }
+                });
+            },
+            // dataFilter: function (data, type) {
+            //
+            // },
+            dataType: "json",
+            dataSrc: function (data) {
+                if (data.result === "success") {
+                    $("#pages").bs_pagination({
+                        currentPage: data.data.currentPage,
+                        rowsPerPage: data.data.rowsPerPage,
+                        maxRowsPerPage: data.data.maxRowsPerPage,
+                        totalRows: data.data.totalRows,
+                        totalPages: data.data.totalPages,
+                        visiblePageLinks: data.data.visiblePageLinks,
+                        showGoToPage: true,
+                        showRowsPerPage: true,
+                        showRowsInfo: true,
+                        showRowsDefaultInfo: true,
+                        onChangePage: function (event, data) {
+                            activities.attr("data-currentpage", data.currentPage);
+                            activities.attr("data-rowsperpage", data.rowsPerPage);
+                            activities.DataTable().ajax.reload();
+                        }
+                    });
+                    return data.data.data;
+                } else {
+                    alert(data.msg);
+                    return null;
+                }
+            },
+            async: false
+        };
+
         //todo 初始化表格
         var activities = $("#activities");
         var table = activities.DataTable({
             "paging": false,
-            "serverSide": true,
-            "lengthChange": true,
+            "serverSide": false,
+            "lengthChange": false,
             "searching": false,
-            "ordering": true,
+            "ordering": false,
             "info": false,
-            "autoWidth": false,
-            "responsive": true,
+            "autoWidth": true,
+            // "responsive": true,
             /**
              * dataTable中的(option)ajax可接收三种类型的参数:
              * string:设置获取数据的 url；
@@ -565,56 +630,13 @@
              * function:自定义获取数据的方法；
              * 详情见: https://datatables.club/reference/option/ajax
              */
-            "ajax": {
-                url: "activity/getPage.action",
-                type: "post",
-                /**
-                 * 使用 DataTable().ajax.reload()刷新表格时，对于动态参数不能用 JSON格式，而应用 function()；
-                 */
-                contentType: "application/json; charset=UTF-8",
-                data: function () {
-                    return JSON.stringify({
-                        "currentPage": activities.attr("data-currentpage"),
-                        "rowsPerPage": activities.attr("data-rowsperpage")
-                    });
-                },
-                // dataFilter: function (data, type) {
-                //
-                // },
-                dataType: "json",
-                dataSrc: function (data) {
-                    if (data.result === "success") {
-                        $("#pages").bs_pagination({
-                            currentPage: data.data.currentPage,
-                            rowsPerPage: data.data.rowsPerPage,
-                            maxRowsPerPage: data.data.maxRowsPerPage,
-                            totalRows: data.data.totalRows,
-                            totalPages: data.data.totalPages,
-                            visiblePageLinks: data.data.visiblePageLinks,
-                            showGoToPage: true,
-                            showRowsPerPage: true,
-                            showRowsInfo: true,
-                            showRowsDefaultInfo: true,
-                            onChangePage: function (event, data) {
-                                activities.attr("data-currentpage", data.currentPage);
-                                activities.attr("data-rowsperpage", data.rowsPerPage);
-                                activities.DataTable().ajax.reload();
-                            }
-                        });
-                        return data.data.data;
-                    } else {
-                        alert(data.msg);
-                        return null;
-                    }
-                },
-                async: false
-            },
+            "ajax": option,
             "columns": [
                 {"data": null},
                 {"data": null},
-                {"data": "owner.name"},
-                {"data": "createBy.name"},
-                {"data": "editBy.name"},
+                {"data": "owner.name", "sType": "chinese-sort"},
+                {"data": "createBy.name", "sType": "chinese-sort"},
+                {"data": "editBy.name", "sType": "chinese-sort"},
                 {"data": "startDate"},
                 {"data": "endDate"},
                 {"data": "cost"},
@@ -648,6 +670,11 @@
                 }
             ],
             "order": [[1, 'asc']]
+        });
+
+        //todo 查询按钮
+        $("#queryBtn").click(function () {
+            $.ajax(option);
         });
 
         //todo 初始化模态框(由添加/修改按钮触发)
@@ -694,7 +721,6 @@
                     success: function (data, textStatus, jqXHR) {
                         if (data.result === "success") {
                             table.ajax.reload();
-
                             var checkbox = $("#activities thead :checkbox");
                             checkbox.get(0).indeterminate = false;
                             checkbox.prop("checked", false);
@@ -810,7 +836,7 @@
         //todo 条件查询
         $("#queryBtn").click(function () {
             $.ajax({
-                url:""
+                url: ""
             });
         });
     });
@@ -823,4 +849,5 @@
         });
         return ids;
     }
+
 </script>

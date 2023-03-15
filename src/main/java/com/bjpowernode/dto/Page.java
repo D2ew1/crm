@@ -27,7 +27,7 @@ public class Page implements Serializable {
     private Integer visiblePageLinks = 5;
     private List data;
     /**
-     * 查询条件(待定)
+     * 查询条件
      */
-    private Map<String, Object> conditions = new HashMap<>();
+    private Map<String, Object> queryCond = new HashMap<>();
 }

@@ -29,7 +29,7 @@
 
     <select id="getPage" resultMap="dictValueResultMap">
         <include refid="dictValueInfo"/>
-        order by type_id, orderNo
+        order by convert(type_name using gbk), orderNo
         limit #{index},#{offset}
     </select>
 

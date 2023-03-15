@@ -101,8 +101,6 @@ public class DictionaryTypeController {
     }
 
     /**
-     * @param ids
-     * @return
      * @RequestParam校正请求参数名，修饰处理器方法参数； 可选参数 required为 true时，表示请求必须传递参数；
      * 可选参数 defaultValue为默认参数值
      */
