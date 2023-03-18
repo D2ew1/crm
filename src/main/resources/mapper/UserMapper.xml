@@ -28,10 +28,35 @@
         </association>
     </resultMap>
 
+    <select id="login" resultMap="userResultMap">
+        select
+        usr.id,
+        usr.deptId,
+        usr.loginAct,
+        usr.name,
+        usr.loginPwd,
+        usr.email,
+        usr.expireTime,
+        usr.lockStatus,
+        usr.allowIps,
+        usr.createById,
+        createBy.name as createByName,
+        usr.createTime,
+        usr.editById,
+        editBy.name as editByName,
+        usr.editTime
+        from tbl_user as usr
+        left join tbl_user as createBy on usr.createById = createBy.id
+        left join tbl_user as editBy on usr.editById = editBy.id
+        where usr.loginAct = #{loginAct} and usr.loginPwd = #{loginPwd}
+    </select>
+
     <select id="getAll" resultMap="userResultMap">
-        select id, name
-        from tbl_user
-        order by id
+        select usr.id, usr.name
+        from tbl_user as usr
+        inner join tbl_user as createBy on usr.createById = createBy.id
+        left join tbl_user as editBy on usr.editById = editBy.id
+        order by usr.id
     </select>
 
 

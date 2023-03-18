@@ -6,6 +6,7 @@
     <!-- 响应式支持:兼容多终端 -->
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Hello</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon"/>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"/>
@@ -395,10 +396,8 @@
                         return data.data.data;
                     } else {
                         alert(data.msg);
-                        return null;
                     }
                 },
-                async: false
             },
             "columns": [
                 {"data": null},
@@ -443,12 +442,11 @@
         });
 
         //todo 初始化模态框(由添加/修改按钮触发)
-        function initModal(callback) {
+        function initModal(data, callback) {
             $.ajax({
                 url: "dictionaryType/getAll.action",
                 type: "get",
                 dataType: "json",
-                async: false,
                 success: function (data, textStatus, jqXHR) {
                     if (data.result === "success") {
                         $("#types").empty();
@@ -458,6 +456,7 @@
                             $("#types").append(option);
                         })
                         callback();
+                        resolve();
                     } else {
                         alert(data.msg);
                     }
@@ -505,7 +504,7 @@
         $("#addBtn").click(function () {
             $("#dictValueModal").data("type", "add");
             $("#dictValueModal h4").text("添加字典数值");
-            initModal(function () {
+            initModal(null, function () {
                 $("#dictValueModal").modal('show');
                 $("#id").val("");
                 $("#value").val("");
@@ -582,17 +581,15 @@
                     if (data.result === "success") {
                         $("#dictValueModal").data("type", "edit");
                         $("#dictValueModal h4").text("修改字典数值");
-                        // 注意：若initModal是异步的，则下面的赋值可能会在模态框初始化(下拉框渲染)完之前执行；所以要把initModal设置为同步执行；
-                        initModal(function () {
+                        initModal(data, function () {
                             $("#dictValueModal").modal('show');
+                            $("#id").val(data.data.id);
+                            $("#value").val(data.data.value);
+                            $("#text").val(data.data.text);
+                            $("#orderNo").val(data.data.orderNo);
+                            // 对于<select>只能赋其子组件<option>中的 value属性值；
+                            $("#types").val(data.data.dictType.id);
                         })
-
-                        $("#id").val(data.data.id);
-                        $("#value").val(data.data.value);
-                        $("#text").val(data.data.text);
-                        $("#orderNo").val(data.data.orderNo);
-                        // 对于<select>只能赋其子组件<option>中的 value属性值；
-                        $("#types").val(data.data.dictType.id);
                     } else {
                         alert(data.msg);
                     }

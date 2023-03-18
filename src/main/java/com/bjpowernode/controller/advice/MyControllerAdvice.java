@@ -4,6 +4,7 @@ import com.bjpowernode.dto.Result;
 import com.bjpowernode.dto.ResultDTO;
 import com.bjpowernode.exception.DBException;
 import com.bjpowernode.exception.InputException;
+import com.bjpowernode.exception.LoginException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -33,6 +34,15 @@ public class MyControllerAdvice {
 
     @ExceptionHandler(InputException.class)
     public ResultDTO inputExcpHandler(InputException ex) {
+        ResultDTO resultDTO = new ResultDTO();
+        resultDTO.setResult(Result.error);
+        resultDTO.setData(null);
+        resultDTO.setMsg(ex.getMessage());
+        return resultDTO;
+    }
+
+    @ExceptionHandler(LoginException.class)
+    public ResultDTO loginExcpHandler(LoginException ex) {
         ResultDTO resultDTO = new ResultDTO();
         resultDTO.setResult(Result.error);
         resultDTO.setData(null);

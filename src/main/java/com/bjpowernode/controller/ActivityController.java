@@ -5,6 +5,7 @@ import com.bjpowernode.dto.Page;
 import com.bjpowernode.dto.Result;
 import com.bjpowernode.dto.ResultDTO;
 import com.bjpowernode.exception.DBException;
+import com.bjpowernode.exception.LoginException;
 import com.bjpowernode.exception.InputException;
 import com.bjpowernode.services.ActivityServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class ActivityController {
     ActivityServices activityServices;
 
     @RequestMapping("getPage.action")
-    public ResultDTO getPage(@RequestBody Page page) throws DBException {
+    public ResultDTO getPage(@RequestBody Page page) throws DBException, LoginException {
 
         ResultDTO resultDTO = new ResultDTO();
         activityServices.getPage(page);
@@ -35,7 +36,7 @@ public class ActivityController {
     }
 
     @RequestMapping("get.action")
-    public ResultDTO get(String id) throws DBException {
+    public ResultDTO get(String id) throws DBException, LoginException {
 
         ResultDTO resultDTO = new ResultDTO();
         Activity activity = activityServices.get(id);
@@ -46,7 +47,7 @@ public class ActivityController {
     }
 
     @RequestMapping("add.action")
-    public ResultDTO add(@RequestBody Activity activity) throws DBException, InputException {
+    public ResultDTO add(@RequestBody Activity activity) throws DBException, LoginException, InputException {
 
         ResultDTO resultDTO = new ResultDTO();
         activityServices.add(activity);
@@ -57,7 +58,7 @@ public class ActivityController {
     }
 
     @RequestMapping("del.action")
-    public ResultDTO del(@RequestBody String[] ids) throws DBException {
+    public ResultDTO del(@RequestBody String[] ids) throws DBException, LoginException {
 
         ResultDTO resultDTO = new ResultDTO();
         activityServices.del(ids);

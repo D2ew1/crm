@@ -6,6 +6,7 @@
     <!-- 响应式支持:兼容多终端 -->
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Hello</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon"/>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"/>
@@ -409,10 +410,8 @@
                         return data.data.data;
                     } else {
                         alert(data.msg);
-                        return null;
                     }
                 },
-                async: false
             },
             "columns": [
                 {"data": null},
@@ -443,16 +442,6 @@
             ],
             // 默认按照索引为0的列的值进行排序，故关闭(…)排序时，须指定排序列；
             "order": [[1, 'asc']]
-        });
-
-        //todo 初始化模态框
-        $("#dictTypeModal").on("show.bs.modal", function () {
-            if ($(this).data("type") === "add") {
-                $("#idDiv").show();
-                $("#id").val("");
-                $("#name").val("");
-                $("#description").val("");
-            }
         });
 
         //todo 删除按钮
@@ -491,6 +480,10 @@
             $("#dictTypeModal").data("type", "add");
             $("#dictTypeModal h4").text("添加字典类型");
             $("#dictTypeModal").modal("show");
+            $("#idDiv").show();
+            $("#id").val("");
+            $("#name").val("");
+            $("#description").val("");
         });
 
         //todo 保存按钮
@@ -555,7 +548,6 @@
                         $("#dictTypeModal").data("type", "edit");
                         $("#dictTypeModal h4").text("修改字典类型");
                         $("#dictTypeModal").modal("show");
-
                         $("#id").val(data.data.id);
                         $("#idDiv").hide();
                         $("#name").val(data.data.name);

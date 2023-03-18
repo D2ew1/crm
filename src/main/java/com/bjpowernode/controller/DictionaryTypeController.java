@@ -5,7 +5,7 @@ import com.bjpowernode.dto.Page;
 import com.bjpowernode.dto.Result;
 import com.bjpowernode.dto.ResultDTO;
 import com.bjpowernode.exception.DBException;
-import com.bjpowernode.exception.CustException;
+import com.bjpowernode.exception.LoginException;
 import com.bjpowernode.exception.InputException;
 import com.bjpowernode.services.DictionaryTypeServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class DictionaryTypeController {
     DictionaryTypeServices typeServices;
 
     @RequestMapping("getAll.action")
-    public ResultDTO getAll() throws DBException {
+    public ResultDTO getAll() throws DBException, LoginException {
 
         ResultDTO resultDTO = new ResultDTO();
         ArrayList<DictionaryType> dictionaryTypes = typeServices.getAll();
@@ -47,7 +47,7 @@ public class DictionaryTypeController {
     }
 
     @RequestMapping("getPage.action")
-    public ResultDTO getPage(@RequestBody Page page) throws DBException {
+    public ResultDTO getPage(@RequestBody Page page) throws DBException, LoginException {
 
         ResultDTO resultDTO = new ResultDTO();
         typeServices.getPage(page);
@@ -58,7 +58,7 @@ public class DictionaryTypeController {
     }
 
     @RequestMapping("get.action")
-    public ResultDTO get(String id) throws DBException {
+    public ResultDTO get(String id) throws DBException, LoginException {
 
         ResultDTO resultDTO = new ResultDTO();
         DictionaryType dictionaryType = typeServices.get(id);
@@ -69,7 +69,7 @@ public class DictionaryTypeController {
     }
 
     @RequestMapping("add.action")
-    public ResultDTO add(@Valid @RequestBody DictionaryType dictionaryType, BindingResult bindingResult) throws DBException, InputException {
+    public ResultDTO add(@Valid @RequestBody DictionaryType dictionaryType, BindingResult bindingResult) throws DBException, LoginException, InputException {
 
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
         for (FieldError fieldError : fieldErrors) {
@@ -85,7 +85,7 @@ public class DictionaryTypeController {
     }
 
     @RequestMapping("edit.action")
-    public ResultDTO edit(@Valid @RequestBody DictionaryType dictionaryType, BindingResult bindingResult) throws DBException, InputException {
+    public ResultDTO edit(@Valid @RequestBody DictionaryType dictionaryType, BindingResult bindingResult) throws DBException, LoginException, InputException {
 
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
         for (FieldError fieldError : fieldErrors) {
@@ -105,7 +105,7 @@ public class DictionaryTypeController {
      * 可选参数 defaultValue为默认参数值
      */
     @RequestMapping("del.action")
-    public ResultDTO del(@RequestBody String[] ids) throws DBException {
+    public ResultDTO del(@RequestBody String[] ids) throws DBException, LoginException {
 
         ResultDTO resultDTO = new ResultDTO();
         typeServices.del(ids);

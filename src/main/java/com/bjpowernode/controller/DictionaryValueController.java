@@ -5,6 +5,7 @@ import com.bjpowernode.dto.Page;
 import com.bjpowernode.dto.Result;
 import com.bjpowernode.dto.ResultDTO;
 import com.bjpowernode.exception.DBException;
+import com.bjpowernode.exception.LoginException;
 import com.bjpowernode.exception.InputException;
 import com.bjpowernode.services.DictionaryValueServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class DictionaryValueController {
     DictionaryValueServices valueServices;
 
     @RequestMapping("getPage.action")
-    public ResultDTO getPage(@RequestBody Page page) throws DBException {
+    public ResultDTO getPage(@RequestBody Page page) throws DBException, LoginException {
 
         ResultDTO resultDTO = new ResultDTO();
         valueServices.getPage(page);
@@ -41,7 +42,7 @@ public class DictionaryValueController {
     }
 
     @RequestMapping("get.action")
-    public ResultDTO get(String id) throws DBException {
+    public ResultDTO get(String id) throws DBException, LoginException {
 
         ResultDTO resultDTO = new ResultDTO();
         DictionaryValue dictionaryValue = valueServices.get(id);
@@ -52,11 +53,10 @@ public class DictionaryValueController {
     }
 
     @RequestMapping("add.action")
-    public ResultDTO add(@Valid @RequestBody DictionaryValue dictionaryValue, BindingResult bindingResult) throws DBException, InputException {
+    public ResultDTO add(@Valid @RequestBody DictionaryValue dictionaryValue, BindingResult bindingResult) throws DBException, LoginException, InputException {
 
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
         for (FieldError fieldError : fieldErrors) {
-            System.out.println(fieldError);
             throw new InputException(fieldError.getDefaultMessage());
         }
 
@@ -69,7 +69,7 @@ public class DictionaryValueController {
     }
 
     @RequestMapping("edit.action")
-    public ResultDTO edit(@Valid @RequestBody DictionaryValue dictionaryValue, BindingResult bindingResult) throws DBException, InputException {
+    public ResultDTO edit(@Valid @RequestBody DictionaryValue dictionaryValue, BindingResult bindingResult) throws DBException, LoginException, InputException {
 
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
         for (FieldError fieldError : fieldErrors) {
@@ -85,7 +85,7 @@ public class DictionaryValueController {
     }
 
     @RequestMapping("del.action")
-    public ResultDTO del(@RequestBody String[] ids) throws DBException {
+    public ResultDTO del(@RequestBody String[] ids) throws DBException, LoginException {
 
         ResultDTO resultDTO = new ResultDTO();
         valueServices.del(ids);

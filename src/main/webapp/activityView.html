@@ -6,6 +6,7 @@
     <!-- 响应式支持:兼容多终端 -->
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Hello</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon"/>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"/>
@@ -452,8 +453,8 @@
 
 </div>
 </body>
-
 </html>
+
 <!--  注意<scirpt>不可自闭合 -->
 <!-- jQuery -->
 <script src="plugins/jquery/jquery.min.js"></script>
@@ -518,7 +519,6 @@
             url: "user/getAll.action",
             type: "get",
             dataType: "json",
-            async: false,
             success: function (data, textStatus, jqXHR) {
                 if (data.result === "success") {
                     // 一个标签只能有一个归属，不能同时归属于三个组件；
@@ -623,10 +623,8 @@
                         return data.data.data;
                     } else {
                         alert(data.msg);
-                        return null;
                     }
-                },
-                async: false
+                }
             },
             "columns": [
                 {"data": null},
@@ -692,7 +690,6 @@
                 url: "user/getAll.action",
                 type: "get",
                 dataType: "json",
-                async: false,
                 success: function (data, textStatus, jqXHR) {
                     if (data.result === "success") {
                         var ownerModal = $("#owner-modal");

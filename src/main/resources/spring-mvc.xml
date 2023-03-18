@@ -14,4 +14,18 @@
 
     <mvc:annotation-driven/>
 
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!--
+                通配符:
+                /*: 拦截某目录下的所有
+                /**: 拦截某目录包括其子目录下的所有
+            -->
+            <!-- 注意:增强控制器不会被拦截，所以应该把所有异常交由增强控制器处理并将结果返回给前端Ajax -->
+            <mvc:mapping path="/**/*.action"/>
+            <mvc:exclude-mapping path="/user/login.action"/>
+            <bean class="com.bjpowernode.interceptor.LoginInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
 </beans>
