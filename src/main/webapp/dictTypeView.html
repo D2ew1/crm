@@ -475,6 +475,8 @@
             }
         });
 
+        var saveBtn = $("#saveBtn");
+
         //todo 添加按钮
         $("#addBtn").click(function () {
             $("#dictTypeModal").data("type", "add");
@@ -484,11 +486,9 @@
             $("#id").val("");
             $("#name").val("");
             $("#description").val("");
-        });
-
-        //todo 保存按钮
-        $("#saveBtn").click(function () {
-            if ($("#dictTypeModal").data("type") === "add") {
+            //todo 添加模态框保存按钮
+            saveBtn.off("click");
+            saveBtn.click(() => {
                 $.ajax({
                     url: "dictionaryType/add.action",
                     type: "post",
@@ -511,29 +511,7 @@
                         alert(textStatus);
                     }
                 })
-            } else if ($("#dictTypeModal").data("type") === "edit") {
-                $.ajax({
-                    url: "dictionaryType/edit.action",
-                    type: "post",
-                    contentType: "application/json; charset=UTF-8",
-                    data: JSON.stringify({
-                        "id": $("#id").val(),
-                        "name": $("#name").val(),
-                        "description": $("#description").val()
-                    }),
-                    success: function (data, textStatus, jqXHR) {
-                        if (data.result === "success") {
-                            $("#dictTypeModal").modal("hide");
-                            table.ajax.reload();
-                        } else {
-                            alert(data.msg);
-                        }
-                    },
-                    error: function (XHR, textStatus, errorThrown) {
-                        alert(textStatus);
-                    }
-                })
-            }
+            });
         });
 
         //todo 编辑按钮
@@ -552,6 +530,31 @@
                         $("#idDiv").hide();
                         $("#name").val(data.data.name);
                         $("#description").val(data.data.description);
+                        //todo 编辑模态框保存按钮
+                        saveBtn.off("click");
+                        saveBtn.click(() => {
+                            $.ajax({
+                                url: "dictionaryType/edit.action",
+                                type: "post",
+                                contentType: "application/json; charset=UTF-8",
+                                data: JSON.stringify({
+                                    "id": $("#id").val(),
+                                    "name": $("#name").val(),
+                                    "description": $("#description").val()
+                                }),
+                                success: function (data, textStatus, jqXHR) {
+                                    if (data.result === "success") {
+                                        $("#dictTypeModal").modal("hide");
+                                        table.ajax.reload();
+                                    } else {
+                                        alert(data.msg);
+                                    }
+                                },
+                                error: function (XHR, textStatus, errorThrown) {
+                                    alert(textStatus);
+                                }
+                            })
+                        });
                     } else {
                         alert(data.msg);
                     }

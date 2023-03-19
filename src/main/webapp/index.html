@@ -6,7 +6,8 @@
     <!-- 响应式支持:兼容多终端 -->
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Hello</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon"/>　
+    <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+    　
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"/>
@@ -41,8 +42,8 @@
         <!-- Right navbar links -->
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" data-widget="" href="#" role="button">
-                    登录
+                <a class="nav-link" data-widget="" href="javascript:void(0);" role="button" id="logout">
+                    登出
                 </a>
             </li>
             <li class="nav-item">
@@ -224,4 +225,26 @@
      * 其中 document.ready()是在 DOM结构绘制完成后(文档结构加载完毕，不包含图片等非文字媒体文件)执行；
      * 而 window.onload()是在页面所有内容全部加载完毕后执行；
      */
+
+    $(function () {
+
+        $("#logout").click(function () {
+            $.ajax({
+                url: "user/logout.action",
+                type: "get",
+                dataType: "json",
+                success: function (data, textStatus, jqXhR) {
+                    if (data.result === "success") {
+                        window.location.href = "login.html";
+                    } else {
+                        alert(data.msg);
+                    }
+                },
+                error: function (XHR, textStatus, errorThrown) {
+                    alert(textStatus)
+                }
+            });
+        });
+    });
+
 </script>

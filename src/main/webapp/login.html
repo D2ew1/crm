@@ -35,7 +35,7 @@
                 </div>
                 <div class="checkbox" style="position: relative;top: 30px; left: 10px;">
                     <label>
-                        <input id="rememberMe" type="checkbox" value="1"> 七天免登录
+                        <input id="rememberMe" type="checkbox" value="0"> 七天免登录
                     </label>
                 </div>
                 <button type="button" id="loginBtn" class="btn btn-primary btn-lg btn-block"
@@ -52,18 +52,34 @@
 <script src="plugins/jquery/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+<!-- jQuery Cookie -->
+<script src="plugins/jquery-cookie/jquery.cookie.js"></script>
 <!-- Bootstrap 4 -->
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 <script>
+
+    function rememberMe() {
+        if ($.cookie("loginAct") && $.cookie("loginPwd")) {
+            $("#loginAct").val($.cookie("loginAct"));
+            $("#loginPwd").val($.cookie("loginPwd"));
+            $("#rememberMe").prop("checked", true);
+        }
+    };
+
     $(function () {
+
+        rememberMe();
+
+        //todo 登录按钮
         $("#loginBtn").click(function () {
             $.ajax({
                 url: "user/login.action",
                 type: "post",
                 data: {
                     "loginAct": $("#loginAct").val(),
-                    "loginPwd": $("#loginPwd").val()
+                    "loginPwd": $("#loginPwd").val(),
+                    "rememberMe": $("#rememberMe").val()
                 },
                 dataType: "json",
                 success: function (data, textStatus, jqXHR) {
@@ -78,5 +94,16 @@
                 }
             });
         });
+
+        // 在普通函数中 this永远指向调用自己的函数对应的对象；
+        // 而箭头函数中 this指向定义调用自己的函数时所在的作用域指向的对象；
+        $("#rememberMe").click(function () {
+            if (this.checked) {
+                $(this).val(1);
+            } else {
+                $(this).val(0);
+            }
+        })
+
     });
 </script>

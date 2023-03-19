@@ -1,10 +1,14 @@
 package com.bjpowernode.interceptor;
 
 import com.bjpowernode.beans.User;
+import com.bjpowernode.exception.DBException;
 import com.bjpowernode.exception.LoginException;
+import com.bjpowernode.services.UserServices;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -17,22 +21,44 @@ import javax.servlet.http.HttpSession;
  */
 public class LoginInterceptor implements HandlerInterceptor {
 
+    @Autowired
+    UserServices userServices;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         System.out.println("preHandle:" + request.getRequestURI());
 
+        // 设置为 false是因为确保只在用户登入时才生成 Session，避免服务器内存被大量占用；
         HttpSession session = request.getSession(false);
 
-        if (session != null) {
-            User user = (User) session.getAttribute("user");
-            if (user != null) {
+        if (session != null && session.getAttribute("user") != null) {
+            return true;
+        } else {
+            String loginAct = "";
+            boolean loginActFlag = false;
+            String loginPwd = "";
+            boolean loginPwdFlag = false;
+
+            Cookie[] cookies = request.getCookies();
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("loginAct")) {
+                    loginAct = cookie.getValue();
+                    loginActFlag = true;
+                }
+                if (cookie.getName().equals("loginPwd")) {
+                    loginPwd = cookie.getValue();
+                    loginPwdFlag = true;
+                }
+            }
+
+            if (loginActFlag && loginPwdFlag) {
+                User login = userServices.login(loginAct, loginPwd);
+                request.getSession(true).setAttribute("user", login);
                 return true;
             } else {
-                throw new LoginException("会话中无用户信息");
+                throw new LoginException("请登录");
             }
-        } else {
-            throw new LoginException("无会话信息");
         }
     }
 
